@@ -1,0 +1,8 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Copa exactamente como la imagen de referencia - medio llena -->
+  <path d="M6 3 L6 7 C6 12.5 8.5 15 12 15 C15.5 15 18 12.5 18 7 L18 3 L6 3 Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Vino exactamente como en la imagen - mitad inferior con superficie plana -->
+  <path d="M6 11 L18 11 L18 7 C18 12.5 15.5 15 12 15 C8.5 15 6 12.5 6 7 L6 11 Z" fill="currentColor"/>
+  <line x1="12" y1="15" x2="12" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M8.5 21.5 L15.5 21.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>

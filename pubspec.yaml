@@ -1,5 +1,5 @@
 name: my_secret_wine
-description: Una aplicación Flutter para Android e iOS relacionada con vinos.
+description: App en Flutter para Android e iOS relacionada con el mundo del vino.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -14,20 +14,36 @@ dependencies:
   http: ^1.1.0
   shared_preferences: ^2.2.2
   flutter_rating_bar: ^4.0.1
+  url_launcher: ^6.3.2
+  crypto: ^3.0.6
+  audioplayers: ^6.5.1
+  google_fonts: ^6.1.0
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
     - assets/icons/
+    - assets/audio/
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-VariableFont_wght.ttf
+        - asset: assets/fonts/Montserrat-Italic-VariableFont_wght.ttf
+          style: italic
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/icons/app_icon.png"
+  remove_alpha_ios: true
