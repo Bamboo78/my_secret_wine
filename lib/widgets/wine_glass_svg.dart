@@ -59,8 +59,8 @@ class WineGlassSvgGradient extends StatelessWidget {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
         colors: gradientColors,
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
       ).createShader(bounds),
       child: WineGlassSvgIcon(
         state: state,

@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/temas_content.dart';
 import '../data/test_preguntas.dart';
 import 'dart:math' as math;
-
-// Colores temáticos de vino
-class WineColors {
-  static const Color redWine = Color(0xFF722F37); // Vino tinto
-  static const Color whiteWine = Color(0xFFF7E7CE); // Vino blanco
-}
+import 'dart:async';
+import '../main.dart';
 
 class TemaDetallePage extends StatefulWidget {
   final String temaTitle;
   final int temaNumber;
   final AudioPlayer audioPlayer;
   final Function(int)? onTestCompleted; // Callback para cuando se completa un test
+  final bool isGuestMode;
 
   const TemaDetallePage({
     super.key,
@@ -23,6 +21,7 @@ class TemaDetallePage extends StatefulWidget {
     required this.temaNumber,
     required this.audioPlayer,
     this.onTestCompleted,
+    this.isGuestMode = false,
   });
 
   @override
@@ -33,8 +32,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
   int preguntaActual = 0;
   int respuestasCorrectas = 0;
   Set<int> fichasVolteadas = {}; // Para rastrear qué fichas están volteadas
-  bool isMusicPlaying = true; // Asumimos que la música está sonando al inicio
+  bool isMusicPlaying = false; // La música no suena desde el inicio
   Map<int, AnimationController> fichaControllers = {}; // Controladores de animación por ficha
+  bool testAttempted = false; // Para saber si el test ya fue intentado
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTestAttemptedState();
+  }
 
   @override
   void dispose() {
@@ -45,6 +51,11 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
     super.dispose();
   }
 
+  // Obtener colores según el tema
+  Color _getBackgroundColor() => globalThemeNotifier.value ? Colors.black : Colors.white;
+  Color _getTextColor() => globalThemeNotifier.value ? Colors.white : Colors.black;
+  Color _getBorderColor() => globalThemeNotifier.value ? Colors.white : Colors.black;
+
   Future<void> _toggleMusic() async {
     try {
       if (isMusicPlaying) {
@@ -53,40 +64,57 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
           isMusicPlaying = false;
         });
       } else {
+        // Configurar la fuente de audio si es la primera vez
+        await widget.audioPlayer.setSource(AssetSource('audio/background.mp3'));
+        await widget.audioPlayer.setReleaseMode(ReleaseMode.loop);
         await widget.audioPlayer.resume();
         setState(() {
           isMusicPlaying = true;
         });
       }
     } catch (e) {
-      debugPrint('Error al cambiar el estado de la música: $e');
+      // Error al cambiar el estado de la música - mostrar información
+      debugPrint('Error con la música: $e');
+      // Resetear el estado en caso de error
+      if (mounted) {
+        setState(() {
+          isMusicPlaying = false;
+        });
+        // Mostrar mensaje al usuario
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al reproducir música: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
     }
   }
 
   void _showOptionsDialog() { //popup con opciones
-    showDialog(
+    _showDialogWithFade(
       context: context,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
-      builder: (BuildContext context) {
-        return Dialog(
+      builder: (BuildContext context) => Dialog(
           backgroundColor: Colors.transparent,
           child: StatefulBuilder(
             builder: (context, setState) {
               return Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: _getBackgroundColor(),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: _getBorderColor(), width: 2),
                 ),
                 padding: const EdgeInsets.all(30),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Distribución uniforme
                   children: [
-                    const Text(
+                    Text(
                       '¿Qué deseas hacer?',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: TextStyle(color: _getTextColor(), fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
@@ -95,15 +123,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Colors.orange, Colors.purple],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2), // Padding para el borde gradiente
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: _getBackgroundColor(),
                           borderRadius: BorderRadius.circular(9),
                         ),
                         child: ElevatedButton(
@@ -113,8 +141,8 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
+                            backgroundColor: _getBackgroundColor(),
+                            foregroundColor: _getTextColor(),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(9),
                             ),
@@ -124,22 +152,66 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ShaderMask(
-                                shaderCallback: (bounds) => const LinearGradient(
-                                  colors: [Colors.orange, Colors.purple],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                ).createShader(bounds),
-                                child: Icon(
-                                  isMusicPlaying ? Icons.volume_up : Icons.volume_off,
-                                  color: Colors.white,
-                                  size: 24,
-                                ),
+                              Icon(
+                                isMusicPlaying ? Icons.volume_up : Icons.volume_off,
+                                color: _getTextColor(),
+                                size: 24,
                               ),
                               const SizedBox(width: 12),
                               Text(
                                 isMusicPlaying ? 'Silenciar música' : 'Activar música',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20), // Más separación entre botones
+                    // Botón de cambiar contraste
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Colors.orange, Colors.purple],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(2), // Padding para el borde gradiente
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _getBackgroundColor(),
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              toggleGlobalTheme();
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _getBackgroundColor(),
+                            foregroundColor: _getTextColor(),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                globalThemeNotifier.value ? Icons.light_mode : Icons.dark_mode,
+                                color: _getTextColor(),
+                                size: 24,
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                globalThemeNotifier.value ? 'Tema claro' : 'Tema oscuro',
+                                style: const TextStyle(fontSize: 16),
                               ),
                             ],
                           ),
@@ -152,45 +224,52 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Colors.orange, Colors.purple],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
                         ),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2), // Padding para el borde gradiente
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: _getBackgroundColor(),
                           borderRadius: BorderRadius.circular(9),
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
+                            _showExitConfirmationDialog();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
+                            backgroundColor: _getBackgroundColor(),
+                            foregroundColor: _getTextColor(),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(9),
                             ),
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
-                          child: const Text(
-                            'VOLVER AL TEMARIO',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.close,
+                                color: _getTextColor(),
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text('Cerrar aplicación', style: TextStyle(fontSize: 16, color: _getTextColor())),
+                            ],
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               );
             },
           ),
-        );
-      },
+        ),
     );
   }
 
@@ -199,67 +278,71 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
     final temaContent = TemasData.getTema(widget.temaNumber) ?? 
                        TemasData.getTemaPorDefecto(widget.temaNumber);
     
-    return Scaffold(
+    return ValueListenableBuilder<bool>(
+      valueListenable: globalThemeNotifier,
+      builder: (context, isDark, child) {
+        return Scaffold(
       appBar: AppBar(
         title: Padding(
           padding: const EdgeInsets.only(top: 12.0),
           child: Text(
             _extractTitleOnly(widget.temaTitle),
-            style: const TextStyle(color: Colors.white),
+            style: TextStyle(color: _getTextColor()),
           ),
         ), //título del appbar
-        centerTitle: false,
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        centerTitle: true,
+        backgroundColor: _getBackgroundColor(),
         toolbarHeight: 80,
         automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0, top: 22.0, bottom: 10.0),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pop(); // Volver al temario
+            },
+            child: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return const LinearGradient(
+                  colors: [Colors.orange, Colors.purple],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ).createShader(bounds);
+              },
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: 48,
+              ),
+            ),
+          ),
+        ), // Botón de volver al temario
         actions: [
           
           Padding(
-            padding: const EdgeInsets.only(right: 16.0, top: 10.0, bottom: 10.0),
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Colors.orange, Colors.purple],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.all(2),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    _showOptionsDialog();
-                  },
-                  child: Center(
-                    child: ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [Colors.orange, Colors.purple],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ).createShader(bounds),
-                      child: const Icon(
-                        Icons.settings,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  ),
+            padding: const EdgeInsets.only(right: 16.0, top: 22.0, bottom: 10.0),
+            child: InkWell(
+              onTap: () {
+                _showOptionsDialog();
+              },
+              child: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return const LinearGradient(
+                    colors: [Colors.orange, Colors.purple],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ).createShader(bounds);
+                },
+                child: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                  size: 48,
                 ),
               ),
             ),
-          ), // Botón de configurarción
+          ), // Botón de configuración
         ],
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: _getBackgroundColor(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -269,19 +352,19 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  color: Colors.black,
+                  color: _getBackgroundColor(),
                   child: SingleChildScrollView(
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 1),
+                        border: Border.all(color: _getBorderColor(), width: 1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: _getBackgroundColor(),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Column(
@@ -298,39 +381,43 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
 
               const SizedBox(height: 20),
 
-              Container( //botón de PRÁCTICA
+              SizedBox( //botón DEMUESTRA LO QUE SABES
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Colors.orange, Colors.purple],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: const EdgeInsets.all(2), // Padding para el borde gradiente
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _mostrarPractica();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    gradient: const LinearGradient(
+                      colors: [Colors.orange, Colors.purple],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                     ),
-                    child: const Text(
-                      'Es hora de disfrutar',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(2), // Padding para el borde gradiente
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () => _mostrarPractica(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Text(
+                        testAttempted ? 'Vuelve a intentarlo!' : 'Demuestra lo que sabes!',
+                        style: TextStyle(
+                          fontSize: 16, 
+                          fontWeight: FontWeight.bold, 
+                          color: _getTextColor(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -340,11 +427,13 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
         ),
       ),
     );
+      },
+    );
   }
 
   // Método para extraer el título sin la palabra "tema" pero manteniendo el número
   String _extractTitleOnly(String fullTitle) {
-    if (fullTitle.contains('tema ') && fullTitle.contains(' - ')) {
+    if (fullTitle.contains('tema ') && fullTitle.contains(' ')) {
       // Extraer número y título: "tema 1 - Título" -> "1 - Título"
       String withoutTema = fullTitle.replaceFirst('tema ', '');
       return withoutTema;
@@ -401,13 +490,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                     colors: isShowingFront 
                       ? [Colors.orange, Colors.purple]  
                       : [Colors.orange, Colors.purple], 
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                   ),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: globalThemeNotifier.value 
+                        ? Colors.white.withValues(alpha: 0.5)
+                        : Colors.black.withValues(alpha: 0.5),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -416,7 +507,9 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                 padding: const EdgeInsets.all(2),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isShowingFront ? Colors.black : Colors.white,
+                    color: isShowingFront 
+                      ? (globalThemeNotifier.value ? Colors.black : Colors.white)
+                      : (globalThemeNotifier.value ? Colors.white : Colors.black),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(16),
@@ -444,16 +537,16 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.help_outline,
-            color: Colors.orange,
-            size: 24,
+            color: _getTextColor(),
+            size: 30,
           ),
           const SizedBox(height: 12),
           Text(
             pregunta,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: globalThemeNotifier.value ? Colors.white : Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
@@ -474,8 +567,8 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
         children: [
           Text(
             respuesta,
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: globalThemeNotifier.value ? Colors.black : Colors.white,
               fontWeight: FontWeight.w600,
               fontSize: 14,
               height: 1.4,
@@ -498,11 +591,12 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
         widgets.add(
           Text(
             item,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: _getTextColor(),
               fontSize: 16,
               height: 1.6,
             ),
+            textAlign: TextAlign.center,
           ),
         );
       } else if (item is FichaTema) {
@@ -515,59 +609,7 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
         widgets.add(const SizedBox(height: 16));
       }
     }
-    
-    // Agregar el botón "INICIAR TEST" al final del contenido
-    widgets.add(const SizedBox(height: 30)); // Espacio antes del botón
-    widgets.add(
-      Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Colors.orange, Colors.purple],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            _iniciarTest();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.white,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            elevation: 0,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Comprueba lo que sabes!',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              const SizedBox(width: 12),
-              ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Colors.white, Colors.white],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ).createShader(bounds),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -575,85 +617,9 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
     );
   }
 
-  void _mostrarPractica() { //popup de práctica (vacío por ahora)
-    showDialog(
-      context: context,
-      barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            height: MediaQuery.of(context).size.height * 0.6,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white, width: 2),
-            ),
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Icon(
-                  Icons.lightbulb_outline,
-                  color: Colors.orange,
-                  size: 60,
-                ),
-                const Text(
-                  'Practica',
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-                const Text(
-                  'Sección de práctica en desarrollo...',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.orange, Colors.purple],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.all(2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text(
-                        'Cerrar',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
-  void _iniciarTest() {
+
+  void _mostrarPractica() { // Iniciar test directamente
     final preguntas = TestPorTema.preguntasPorTema[widget.temaNumber] ?? [];
     if (preguntas.isEmpty) {
       _mostrarMensajeNoHayTest();
@@ -667,7 +633,7 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
   }
 
   void _mostrarMensajeNoHayTest() { //popup de no hay test disponible en este tema
-    showDialog(
+    _showDialogWithFade(
       context: context,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
       builder: (BuildContext context) {
@@ -677,27 +643,22 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: _getBackgroundColor(),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white, width: 2),
+              border: Border.all(color: _getBorderColor(), width: 2),
             ),
             padding: const EdgeInsets.all(30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Icon(
-                  Icons.quiz,
-                  color: Colors.orange,
-                  size: 60,
-                ),
-                const Text(
+                Text(
                   'Test no disponible',
-                  style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: _getTextColor(), fontSize: 24, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
-                const Text(
+                Text(
                   'Aún no hay preguntas disponibles para este tema. ¡Pronto estará listo!',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: _getTextColor(), fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 Container(
@@ -705,15 +666,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Colors.orange, Colors.purple],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(2),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: _getBackgroundColor(),
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: ElevatedButton(
@@ -721,17 +682,17 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(9),
                         ),
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Entendido',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
                       ),
                     ),
                   ),
@@ -746,8 +707,10 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
 
   void _mostrarTest(List<PreguntaTest> preguntas) {
     int? respuestaSeleccionada;
+    double tiempoRestante = 30.0; // 30 segundos
+    Timer? timer;
     
-    showDialog( //preguntas del test
+    _showDialogWithFade( //preguntas del test
       context: context,
       barrierDismissible: false,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.9),
@@ -756,15 +719,51 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
           builder: (context, setStateDialog) {
             final pregunta = preguntas[preguntaActual];
             
+            // Iniciar temporizador si no existe
+            timer ??= Timer.periodic(const Duration(milliseconds: 100), (Timer t) {
+                if (!context.mounted) {
+                  t.cancel();
+                  return;
+                }
+                if (tiempoRestante > 0) {
+                  setStateDialog(() {
+                    tiempoRestante -= 0.1;
+                  });
+                } else {
+                  t.cancel();
+                  // Tiempo agotado, evaluar respuesta y mostrar resultado
+                  bool esCorrecta = false;
+                  if (respuestaSeleccionada != null) {
+                    esCorrecta = respuestaSeleccionada == pregunta.respuestaCorrecta;
+                    if (esCorrecta) {
+                      respuestasCorrectas++;
+                    }
+                  }
+                  
+                  // Si no hay respuesta seleccionada, se considera incorrecta
+                  _mostrarResultadoPregunta(context, esCorrecta, pregunta.explicacion, () {
+                    Navigator.of(context).pop(); // Cerrar dialog del test
+                    if (preguntaActual < preguntas.length - 1) {
+                      preguntaActual++;
+                      tiempoRestante = 30.0;
+                      timer = null;
+                      _mostrarTest(preguntas);
+                    } else {
+                      _mostrarResultadoFinal(preguntas.length);
+                    }
+                  });
+                }
+              });
+            
             return Dialog(
               backgroundColor: Colors.transparent,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 height: MediaQuery.of(context).size.height * 0.8,
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: _getBackgroundColor(),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white, width: 2),
+                  border: Border.all(color: _getBorderColor(), width: 2),
                 ),
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -775,7 +774,7 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                       children: [
                         Text(
                           'Pregunta ${preguntaActual + 1}/${preguntas.length}',
-                          style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: _getTextColor(), fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -787,16 +786,52 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(20),
-                        child: Center(
-                          child: Text(
-                            pregunta.pregunta,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              pregunta.pregunta,
+                              style: TextStyle(
+                                color: _getTextColor(),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
+                            const SizedBox(height: 20),
+                            // Barra de tiempo (30 segundos)
+                            Container(
+                              width: double.infinity,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Colors.orange, Colors.purple],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.all(2),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: (tiempoRestante * 100 / 30).round(),
+                                    child: Container(
+                                      height: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: _getTextColor(),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 100 - (tiempoRestante * 100 / 30).round(),
+                                    child: Container(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -817,17 +852,17 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                               gradient: isSelected 
                                 ? const LinearGradient(
                                     colors: [Colors.orange, Colors.purple],
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
                                   )
                                 : null,
-                              border: isSelected ? null : Border.all(color: Colors.white, width: 1),
+                              border: isSelected ? null : Border.all(color: _getBorderColor(), width: 1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             padding: isSelected ? const EdgeInsets.all(2) : EdgeInsets.zero,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.black,
+                                color: _getBackgroundColor(),
                                 borderRadius: BorderRadius.circular(isSelected ? 8 : 10),
                               ),
                               child: ElevatedButton(
@@ -837,8 +872,8 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: _getBackgroundColor(),
+                                  foregroundColor: _getTextColor(),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(isSelected ? 8 : 10),
                                   ),
@@ -877,19 +912,19 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                         gradient: respuestaSeleccionada != null 
                           ? const LinearGradient(
                               colors: [Colors.orange, Colors.purple],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
                             )
                           : null,
                         border: respuestaSeleccionada == null 
-                          ? Border.all(color: Colors.white, width: 1)
+                          ? Border.all(color: _getBorderColor(), width: 1)
                           : null,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       padding: const EdgeInsets.all(2),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.black,
+                          color: _getBackgroundColor(),
                           borderRadius: BorderRadius.circular(respuestaSeleccionada != null ? 9 : 8),
                         ),
                         child: ElevatedButton(
@@ -902,11 +937,13 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                               }
                               
                               _mostrarResultadoPregunta(context, esCorrecta, pregunta.explicacion, () {
+                                timer?.cancel(); // Cancelar timer actual
                                 if (preguntaActual < preguntas.length - 1) {
-                                  setStateDialog(() {
-                                    preguntaActual++;
-                                    respuestaSeleccionada = null; // Reset para la siguiente pregunta
-                                  });
+                                  Navigator.of(context).pop();
+                                  preguntaActual++;
+                                  tiempoRestante = 30.0; // Reiniciar tiempo
+                                  timer = null; // Reset timer
+                                  _mostrarTest(preguntas); // Mostrar siguiente pregunta
                                 } else {
                                   Navigator.of(context).pop();
                                   _mostrarResultadoFinal(preguntas.length);
@@ -916,17 +953,17 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                             // Si no hay respuesta seleccionada, no hacer nada
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
+                            backgroundColor: _getBackgroundColor(),
+                            foregroundColor: _getTextColor(),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(respuestaSeleccionada != null ? 9 : 8),
                             ),
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Siguiente',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
                           ),
                         ),
                       ),
@@ -942,7 +979,7 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
   }
 
   void _mostrarResultadoPregunta(BuildContext context, bool esCorrecta, String explicacion, VoidCallback onContinuar) { //resultado de cada respuesta
-    showDialog(
+    _showDialogWithFade(
       context: context,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
       builder: (BuildContext context) {
@@ -952,9 +989,9 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.6,
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: _getBackgroundColor(),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white, width: 2),
+              border: Border.all(color: _getBorderColor(), width: 2),
             ),
             padding: const EdgeInsets.all(30),
             child: Column(
@@ -978,8 +1015,8 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                   padding: const EdgeInsets.all(12),
                   child: Text(
                     explicacion,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: _getTextColor(),
                       fontSize: 16,
                       height: 1.4,
                     ),
@@ -991,15 +1028,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Colors.orange, Colors.purple],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(2),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: _getBackgroundColor(),
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: ElevatedButton(
@@ -1008,17 +1045,17 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                         onContinuar();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(9),
                         ),
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Continuar',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
                       ),
                     ),
                   ),
@@ -1033,38 +1070,64 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
 
   void _mostrarResultadoFinal(int totalPreguntas) {
     String mensaje;
-    String emoji;
     bool testPasado = false;
     String copaState = 'empty'; // Estado de la copa: empty, half, full
     
-    // Implementar los 3 casos según las respuestas correctas
-    if (respuestasCorrectas == 5) {
-      // Caso 1: 5/5 preguntas correctas - Copa llena + desbloquea tema
-      mensaje = '¡Perfecto! Excelente conocimiento sobre el mundo del vino!';
-      emoji = '🏆';
-      testPasado = true;
-      copaState = 'full';
-    } else if (respuestasCorrectas == 4) {
-      // Caso 2: 4/5 preguntas correctas - Copa medio llena + desbloquea tema
-      mensaje = '¡Muy bien! Gran conocimiento sobre el mundo del vino!';
-      emoji = '👍';
-      testPasado = true;
-      copaState = 'half';
+    // Lógica específica para la Última Prueba (tema 22)
+    if (widget.temaNumber == 22) {
+      // Última Prueba: 21 preguntas, una de cada tema
+      if (respuestasCorrectas == 21) {
+        // Caso 1: 21/21 preguntas correctas - Copa llena
+        mensaje = '¡PERFECTO! Has demostrado un conocimiento excepcional del mundo del vino. ¡Eres un verdadero experto!';
+        testPasado = true;
+        copaState = 'full';
+        _savePruebaFinalAprobada(); // Guardar que se aprobó la Última Prueba
+      } else if (respuestasCorrectas >= 18) {
+        // Caso 2: 18-20 preguntas correctas - Copa medio llena + aprobado
+        mensaje = '¡Excelente! Has aprobado la Última Prueba con $respuestasCorrectas aciertos de 21. ¡Gran conocimiento vinícola!';
+        testPasado = true;
+        copaState = 'half';
+        _savePruebaFinalAprobada(); // Guardar que se aprobó la Última Prueba
+      } else {
+        // Caso 3: Menos de 18 aciertos - No aprobado
+        mensaje = 'Has obtenido $respuestasCorrectas aciertos de 21. Necesitas mínimo 18 para aprobar. ¡Repasa y vuelve a intentarlo!';
+        testPasado = false;
+        copaState = 'empty';
+      }
     } else {
-      // Caso 3: 3 o menos preguntas correctas - No desbloquea tema
-      mensaje = 'Te invitamos a repasar el tema y volver a intentarlo.';
-      emoji = '📚';
-      testPasado = false;
-      copaState = 'empty';
+      // Lógica para temas regulares (1-22)
+      if (respuestasCorrectas == 5) {
+        // Caso 1: 5/5 preguntas correctas - Copa llena + desbloquea tema
+        mensaje = '¡Perfecto! Excelente conocimiento sobre el mundo del vino!';
+        testPasado = true;
+        copaState = 'full';
+      } else if (respuestasCorrectas == 4) {
+        // Caso 2: 4/5 preguntas correctas - Copa medio llena + desbloquea tema
+        mensaje = '¡Muy bien! Gran conocimiento sobre el mundo del vino!';
+        testPasado = true;
+        copaState = 'half';
+      } else {
+        // Caso 3: 3 o menos preguntas correctas - No desbloquea tema
+        mensaje = 'Te invitamos a repasar el tema y volver a intentarlo.';
+        testPasado = false;
+        copaState = 'empty';
+      }
     }
 
-    // Si el test se pasó exitosamente, desbloquear el siguiente tema y guardar estado de copa
+    // Siempre guardar el estado de la copa (indica que el test fue intentado)
+    _saveGlassState(widget.temaNumber, copaState);
+    
+    // Actualizar el estado local para que el botón cambie inmediatamente
+    setState(() {
+      testAttempted = true;
+    });
+    
+    // Si el test se pasó exitosamente, desbloquear el siguiente tema
     if (testPasado && widget.onTestCompleted != null) {
       widget.onTestCompleted!(widget.temaNumber);
-      _saveGlassState(widget.temaNumber, copaState);
     }
 
-    showDialog(
+    _showDialogWithFade(
       context: context,
       barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
       builder: (BuildContext context) {
@@ -1074,23 +1137,25 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.6,
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: _getBackgroundColor(),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white, width: 2),
+              border: Border.all(color: _getBorderColor(), width: 2),
             ),
             padding: const EdgeInsets.all(30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  emoji,
-                  style: const TextStyle(fontSize: 80),
-                ),
-                const Text(
-                  'Test finalizado.',
+                  testPasado 
+                    ? (widget.isGuestMode
+                        ? '¡Felicidades!\nHas superado el test'
+                        : (widget.temaNumber == 22 
+                            ? '¡Felicidades!\nHas desbloqueado la Cata Guiada Final'
+                            : '¡Felicidades!\nHas desbloqueado el tema ${widget.temaNumber + 1}'))
+                    : 'Test finalizado.',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
+                    color: _getTextColor(),
+                    fontSize: testPasado ? 24 : 28,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -1110,9 +1175,11 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                   ],
                 ),
                 Text(
-                  mensaje,
-                  style: const TextStyle(
-                    color: Colors.white,
+                  widget.isGuestMode && testPasado
+                    ? 'Recuerda que esta es una versión de prueba. Para guardar tu progreso y desbloquear el siguiente tema, únete al club.'
+                    : mensaje,
+                  style: TextStyle(
+                    color: _getTextColor(),
                     fontSize: 18,
                   ),
                   textAlign: TextAlign.center,
@@ -1120,21 +1187,22 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                 
                 // Mostrar botones diferentes según si pasó el test o no
                 if (testPasado) ...[
-                  // Caso 1 y 2: Test pasado - Solo botón "Volver al Temario"
+                  const SizedBox(height: 20),
+                  // Botón "Volver al Temario"
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Colors.orange, Colors.purple],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(2),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black,
+                        color: _getBackgroundColor(),
                         borderRadius: BorderRadius.circular(9),
                       ),
                       child: ElevatedButton(
@@ -1144,17 +1212,66 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                           Navigator.of(context).pop(); // Vuelve al temario
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
+                          backgroundColor: _getBackgroundColor(),
+                          foregroundColor: _getTextColor(),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),
                           ),
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Volver al Temario',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  // Botón "Reiniciar test" para borrar resultados anteriores
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Colors.orange, Colors.purple],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.all(2),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _getBackgroundColor(),
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // Borrar resultados del test actual
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.remove('tema_${widget.temaNumber}_completado');
+                          await prefs.remove('tema_${widget.temaNumber}_resultado');
+                          
+                          if (!context.mounted) return;
+                          // Cerrar el diálogo
+                          Navigator.of(context).pop();
+                          
+                          // Iniciar nuevo test
+                          _mostrarPractica();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _getBackgroundColor(),
+                          foregroundColor: _getTextColor(),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: Text(
+                          'Reiniciar test',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
                         ),
                       ),
                     ),
@@ -1166,15 +1283,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Colors.orange, Colors.purple],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
                       ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     padding: const EdgeInsets.all(2),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.black,
+                        color: _getBackgroundColor(),
                         borderRadius: BorderRadius.circular(9),
                       ),
                       child: ElevatedButton(
@@ -1183,24 +1300,35 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                           Navigator.of(context).pop(); // Solo cierra el diálogo del resultado
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
+                          backgroundColor: _getBackgroundColor(),
+                          foregroundColor: _getTextColor(),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(9),
                           ),
                           elevation: 0,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        child: const Text(
-                          'Repasar Tema',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.close,
+                              color: _getTextColor(),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Repasar tema',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  // Botón secundario para volver al temario
-                  Container(
+                  const SizedBox(height: 20),
+                  
+                  Container( // Botón secundario para volver al temario
                     width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.white, width: 1),
@@ -1213,17 +1341,17 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                         Navigator.of(context).pop(); // Vuelve al temario
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(9),
                         ),
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
-                      child: const Text(
-                        'Volver al Temario',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      child: Text(
+                        'Volver al temario',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
                       ),
                     ),
                   ),
@@ -1240,5 +1368,157 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
   Future<void> _saveGlassState(int themeNumber, String state) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('glass_state_$themeNumber', state);
+  }
+
+  // Método para guardar que se aprobó la Última Prueba
+  Future<void> _savePruebaFinalAprobada() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('prueba_final_aprobada', true);
+  }
+
+  // Mostrar diálogo de confirmación para cerrar la aplicación
+  void _showExitConfirmationDialog() {
+    _showDialogWithFade(
+      context: context,
+      barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.3,
+            decoration: BoxDecoration(
+              color: _getBackgroundColor(),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: _getBorderColor(), width: 2),
+            ),
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  '¿Seguro que quieres cerrar la aplicación?',
+                  style: TextStyle(color: _getTextColor(), fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Colors.orange, Colors.purple],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(2),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: _getBackgroundColor(),
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _getBackgroundColor(),
+                              foregroundColor: _getTextColor(),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text(
+                              'Cancelar',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Colors.orange, Colors.purple],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(2),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: _getBackgroundColor(),
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              SystemNavigator.pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _getBackgroundColor(),
+                              foregroundColor: _getTextColor(),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: Text(
+                              'Salir',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Método para cargar si el test ya fue intentado
+  Future<void> _loadTestAttemptedState() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? savedState = prefs.getString('glass_state_${widget.temaNumber}');
+    setState(() {
+      testAttempted = savedState != null && savedState != 'empty';
+    });
+  }
+
+  // Función helper para showDialog con transición de fade
+  Future<T?> _showDialogWithFade<T>({
+    required BuildContext context,
+    required WidgetBuilder builder,
+    Color? barrierColor,
+    bool barrierDismissible = true,
+  }) {
+    return showGeneralDialog<T>(
+      context: context,
+      barrierColor: barrierColor ?? Colors.black.withValues(alpha: 0.8),
+      barrierDismissible: barrierDismissible,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondaryAnimation) => builder(context),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
   }
 }

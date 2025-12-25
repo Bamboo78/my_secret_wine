@@ -1,28 +1,55 @@
 # My Secret Wine 🍷
 
-Una aplicación Flutter multiplataforma para Android e iOS dedicada a los amantes del vino. Descubre, guarda y gestiona tus vinos favoritos de manera elegante y sencilla.
+**My Secret Wine** es una aplicación educativa interactiva diseñada para guiarte en el fascinante mundo del vino. Desde su historia milenaria hasta la creación de tu propia bodega en casa, esta app te ofrece un curso completo estructurado en 22 temas esenciales.
 
-## ✨ Características
+## ✨ Características Principales
 
-- 📱 **Multiplataforma**: Disponible para Android e iOS
-- 🍷 **Lista de Vinos**: Explora y descubre nuevos vinos
-- ❤️ **Favoritos**: Marca tus vinos preferidos
-- 👤 **Perfil**: Personaliza tu experiencia
-- 🎨 **Diseño Elegante**: Interfaz moderna con Material Design 3
-- 🌙 **Modo Oscuro**: Soporte completo para tema oscuro
+- � **Curso Estructurado**: 22 temas educativos que cubren historia, viticultura, elaboración, tipos de vino, cata y maridaje.
+- � **Progresión Gamificada**: Desbloquea nuevos temas a medida que apruebas los tests de cada lección.
+- 🧠 **Aprendizaje Interactivo**: Contenido teórico enriquecido con fichas de repaso y curiosidades.
+- 📝 **Evaluación Continua**: Tests al final de cada tema para asegurar la comprensión.
+- 🏆 **Prueba Final**: Un desafío integral en el tema 22 para demostrar todo lo aprendido.
+- 🥂 **Recompensa Exclusiva**: Desbloquea una "Cata Guiada Final" al superar el curso.
+- 🎵 **Experiencia Inmersiva**: Música de fondo relajante para acompañar tu lectura.
+- 🎨 **Personalización**: Modo claro y oscuro, y control de música.
+- 📊 **Seguimiento de Progreso**: Visualiza tus avances con indicadores de copas de vino (vacía, media, llena).
 
-## 🚀 Primeros Pasos
+## 📚 Contenido del Curso
 
-### Prerrequisitos
+El temario está diseñado para llevarte de principiante a experto:
 
-Asegúrate de tener instalado:
+1. **Historia del vino**: Del mito a la copa.
+2. **La vid y sus secretos**: Entendiendo la materia prima.
+3. **Proceso de elaboración**: Del campo a la botella.
+4. **Vino Tinto**: Cuerpo y carácter.
+5. **Vino Blanco**: Frescura y elegancia.
+6. **Vino Rosado**: Equilibrio y versatilidad.
+7. **Vino Espumoso**: Magia en las burbujas.
+8. **Vino Dulce**: Placer en cada sorbo.
+9. **La cata paso a paso**: Aprende a degustar.
+10. **La temperatura perfecta**: El servicio ideal.
+11. **La copa perfecta**: Importancia del cristal.
+12. **Historia del arte y vino**: Cultura líquida.
+13. **Maridajes que enamoran**: El arte de combinar.
+14. **Vino y música**: Armonía perfecta.
+15. **Rutas del vino del mundo**: Viajes enológicos.
+16. **El vino como ritual social**: Compartir y celebrar.
+17. **Cómo leer la etiqueta**: Entiende lo que compras.
+18. **Conservación y servicio**: Cuida tus botellas.
+19. **Cómo elegir el vino**: Consejos de compra.
+20. **Vinos del futuro**: Sostenibilidad y tecnología.
+21. **Cómo crear tu bodega en casa**: Tu colección personal.
+22. **Última prueba**: Demuestra lo aprendido.
 
-- [Flutter](https://flutter.dev/docs/get-started/install) (versión 3.10.0 o superior)
-- [Dart](https://dart.dev/get-dart) (viene incluido con Flutter)
-- [Android Studio](https://developer.android.com/studio) para desarrollo Android
-- [Xcode](https://developer.apple.com/xcode/) para desarrollo iOS (solo en macOS)
+## � Tecnologías Utilizadas
 
-### Instalación
+- **Flutter & Dart**: Framework principal para desarrollo multiplataforma.
+- **audioplayers**: Reproducción de música de fondo ambiental.
+- **shared_preferences**: Persistencia de datos local para guardar tu progreso (temas desbloqueados, puntuaciones).
+- **google_fonts**: Tipografía elegante para una mejor experiencia de lectura.
+- **flutter_svg**: Renderizado de gráficos vectoriales de alta calidad.
+
+## 📱 Instalación y Ejecución
 
 1. **Clona el repositorio**
 
@@ -37,146 +64,55 @@ Asegúrate de tener instalado:
    flutter pub get
    ```
 
-3. **Verifica la configuración**
-
-   ```bash
-   flutter doctor
-   ```
-
-4. **Ejecuta la aplicación**
+3. **Ejecuta la aplicación**
 
    ```bash
    flutter run
    ```
 
-## 🏗️ Estructura del Proyecto
+## �️ Comandos de Desarrollo
 
-```text
-my_secret_wine/
-├── lib/
-│   └── main.dart              # Punto de entrada principal
-├── test/
-│   └── widget_test.dart       # Pruebas de widgets
-├── android/                   # Configuración específica de Android
-├── ios/                       # Configuración específica de iOS
-├── assets/
-│   ├── images/               # Imágenes de la aplicación
-│   └── icons/                # Iconos personalizados
-├── pubspec.yaml              # Dependencias y configuración
-└── README.md                 # Este archivo
-```
+- `flutter run`: Ejecutar en modo debug.
+- `flutter build apk --release`: Generar instalable para Android.
 
-## 🛠️ Comandos Útiles
+## � Autenticación y Acceso
 
-### Desarrollo
+La aplicación cuenta con un sistema de acceso exclusivo mediante un código único vinculado al correo electrónico del usuario.
 
-```bash
-# Ejecutar en modo debug
-flutter run
+### Funcionamiento del Login
 
-# Ejecutar en modo release
-flutter run --release
+1. **Email**: El usuario introduce su dirección de correo electrónico.
+2. **Código de Acceso**: Se debe introducir una contraseña de 6 caracteres generada específicamente para ese email.
+3. **Validación**: La app verifica localmente que el código coincida con el algoritmo de generación.
 
-# Hot reload durante el desarrollo
-# Presiona 'r' en la terminal mientras la app está ejecutándose
+### Algoritmo de Generación de Códigos
 
-# Ejecutar pruebas
-flutter test
+El código se genera utilizando un hash **HMAC-SHA256**:
 
-# Analizar código
-flutter analyze
+- **Secreto**: `mi_secret_v1_2025`
+- **Entrada**: Email normalizado (minúsculas y sin espacios).
+- **Salida**: Una cadena alfanumérica de 6 caracteres.
 
-# Formatear código
-flutter format .
-```
+Este mecanismo asegura que cada usuario tenga una clave única y personal para acceder al contenido del curso.
 
-### Construcción
+Si quieres generar un código nuevo:
 
-```bash
-# Construir APK para Android
-flutter build apk
+1. Abre el archivo `generate_code.dart`.
 
-# Construir App Bundle para Android
-flutter build appbundle
+2. Escribe en la terminal:
 
-# Construir para iOS
-flutter build ios
-```
+   ```bash
+   dart run generate_code.dart "tu@email.com"
+   ```
 
-## 📦 Dependencias Principales
+3. Cambia `tu@email.com` por el tuyo y pulsa enter.
 
-- **flutter**: Framework principal
-- **cupertino_icons**: Iconos de iOS
-- **http**: Cliente HTTP para API calls
-- **shared_preferences**: Almacenamiento local
-- **flutter_rating_bar**: Sistema de puntuación
 
-### Dependencias de Desarrollo
+## �📄 Licencia
 
-- **flutter_test**: Framework de pruebas
-- **flutter_lints**: Reglas de linting para Dart/Flutter
-
-## 🎨 Temas y Diseño
-
-La aplicación utiliza Material Design 3 con:
-
-- **Color principal**: Vino tinto (#8B0000)
-- **Soporte completo para modo oscuro**
-- **Navegación por pestañas**: Vinos, Favoritos, Perfil
-- **Diseño responsivo** para diferentes tamaños de pantalla
-
-## 🧪 Pruebas
-
-Ejecuta las pruebas con:
-
-```bash
-flutter test
-```
-
-Las pruebas incluyen:
-
-- Pruebas unitarias de widgets
-- Verificación de navegación
-- Validación de la interfaz de usuario
-
-## 📱 Compatibilidad
-
-- **Android**: API 21+ (Android 5.0+)
-- **iOS**: iOS 12.0+
-- **Orientaciones**: Retrato y paisaje
-
-## 🔧 Configuración de VS Code
-
-Tareas configuradas:
-
-- **Flutter Run**: Ejecutar la aplicación en modo debug
-- **Flutter Test**: Ejecutar todas las pruebas
-- **Flutter Analyze**: Analizar el código
-
-Extensiones recomendadas:
-
-- Flutter
-- Dart
-
-## 📄 Licencia
-
-Este proyecto está bajo la licencia MIT. Ver `LICENSE` para más detalles.
-
-## 🤝 Contribuir
-
-1. Haz fork del proyecto
-2. Crea tu rama de feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📞 Soporte
-
-Si tienes alguna pregunta o problema:
-
-- Abre un [issue](../../issues) en GitHub
-- Revisa la [documentación de Flutter](https://flutter.dev/docs)
+Este proyecto es de uso educativo y personal.
 
 ---
+¡Disfruta aprendiendo y conviértete en un experto en vinos con...
 
-¡Disfruta explorando el mundo del vino! 🍷✨
+**My Secret Wine**! 🍷✨

@@ -1,7 +1,7 @@
 class PreguntaTest {
   final String pregunta;
   final List<String> opciones;
-  final int respuestaCorrecta; // Índice de la respuesta correcta (0-3)
+  final int respuestaCorrecta;
   final String explicacion;
 
   PreguntaTest({
@@ -113,7 +113,601 @@ class TestPorTema {
       ),
     ],
     
-    23: [
+    4: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+    
+    5: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    6: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    7: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    8: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    9: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    10: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    11: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    12: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    13: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    14: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    15: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    16: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    17: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    18: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    19: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    20: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    21: [
+      PreguntaTest(
+        pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
+        opciones: ['Francia', 'Mesopotamia', 'Italia', 'España'],
+        respuestaCorrecta: 1,
+        explicacion: 'Mesopotamia es considerada la cuna de la vitivinicultura, con evidencias de producción vinícola que datan del 6000 a.C.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué civilización antigua fue clave en la expansión del vino?',
+        opciones: ['Egipcia', 'Romana', 'Griega', 'Persa'],
+        respuestaCorrecta: 1,
+        explicacion: 'El Imperio Romano fue fundamental en la expansión y refinamiento de las técnicas vinícolas por todo su territorio.',
+      ),
+      PreguntaTest(
+        pregunta: '¿En qué período los monasterios jugaron un papel importante en la vinicultura?',
+        opciones: ['Antigüedad', 'Edad Media', 'Renacimiento', 'Era Moderna'],
+        respuestaCorrecta: 1,
+        explicacion: 'Durante la Edad Media, los monasterios fueron centros de innovación vinícola y preservaron las técnicas de elaboración.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Cuántos años aproximadamente tiene la tradición vinícola?',
+        opciones: ['4,000 años', '6,000 años', '8,000 años', '10,000 años'],
+        respuestaCorrecta: 2,
+        explicacion: 'La tradición vinícola tiene más de 8,000 años, siendo una de las bebidas más antiguas de la humanidad.',
+      ),
+      PreguntaTest(
+        pregunta: '¿Qué aspecto cultural NO está tradicionalmente asociado con el vino?',
+        opciones: ['Religión', 'Comercio', 'Arte', 'Tecnología moderna'],
+        respuestaCorrecta: 3,
+        explicacion: 'El vino ha estado asociado históricamente con religión, comercio y arte, mientras que la tecnología moderna es un desarrollo reciente.',
+      ),
+    ],
+
+    22: [
       // Pregunta representativa del Tema 1 - Historia
       PreguntaTest(
         pregunta: '¿En qué región se originó la producción de vino hace más de 8,000 años?',
@@ -260,13 +854,6 @@ class TestPorTema {
         opciones: ['Uso intensivo de químicos', 'Sin uso de pesticidas sintéticos', 'Mayor producción', 'Vendimia mecanizada'],
         respuestaCorrecta: 1,
         explicacion: 'La viticultura ecológica se caracteriza por no usar pesticidas ni fertilizantes sintéticos, respetando el medio ambiente.',
-      ),
-      // Pregunta representativa del Tema 22 - Futuro del vino
-      PreguntaTest(
-        pregunta: '¿Cuál es una tendencia actual en el consumo de vino?',
-        opciones: ['Mayor graduación', 'Vinos más ligeros', 'Botellas más grandes', 'Mayor sulfitado'],
-        respuestaCorrecta: 1,
-        explicacion: 'La tendencia actual es hacia vinos más ligeros, naturales y con menor graduación alcohólica, especialmente entre consumidores jóvenes.',
       ),
     ],
   };
