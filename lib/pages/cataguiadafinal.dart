@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main.dart';
 
-class ContactoPage extends StatefulWidget {
-  const ContactoPage({super.key});
+class FelicidadesPage extends StatefulWidget {
+  const FelicidadesPage({super.key});
 
   @override
-  State<ContactoPage> createState() => _ContactoPageState();
+  State<FelicidadesPage> createState() => _FelicidadesPageState();
 }
 
-class _ContactoPageState extends State<ContactoPage> {
+class _FelicidadesPageState extends State<FelicidadesPage> {
   bool isMusicPlaying = false;
 
   void _toggleMusic() {
@@ -40,18 +40,16 @@ class _ContactoPageState extends State<ContactoPage> {
     }
   }
 
-  Future<void> _launchPhone() async {
-    final Uri phoneLaunchUri = Uri(
-      scheme: 'tel',
-      path: '+34 123 456 789',
-    );
-    
+  Future<void> _launchTelegram() async {
+    // Provisional: sustituye este enlace por el definitivo cuando lo tengas.
+    final Uri telegramUri = Uri.parse('https://t.me/mysecretwine');
+
     try {
-      if (await canLaunchUrl(phoneLaunchUri)) {
-        await launchUrl(phoneLaunchUri);
+      if (await canLaunchUrl(telegramUri)) {
+        await launchUrl(telegramUri, mode: LaunchMode.externalApplication);
       }
     } catch (e) {
-      // Error al abrir teléfono
+      // Error al abrir Telegram
     }
   }
 
@@ -100,8 +98,8 @@ class _ContactoPageState extends State<ContactoPage> {
             title: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '! Felicidades !',
-                style: TextStyle(color: _getTextColor(), fontSize: 34, fontWeight: FontWeight.bold),
+                '! FELICIDADES !',
+                style: TextStyle(color: _getTextColor(), fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             centerTitle: true,
@@ -455,18 +453,18 @@ class _ContactoPageState extends State<ContactoPage> {
                 _buildContactItem(
                   icon: Icons.email,
                   title: 'Email',
-                  subtitle: 'contacto@mysecretwine.com',
+                  subtitle: 'info@lachicadeamarillo.com',
                   onTap: _launchEmail,
                 ),
                 
                 const SizedBox(height: 24),
                 
-                // Teléfono
+                // Telegram
                 _buildContactItem(
-                  icon: Icons.phone,
-                  title: 'Teléfono',
-                  subtitle: '+34 123 456 789',
-                  onTap: _launchPhone,
+                  icon: Icons.send,
+                  title: 'Telegram',
+                  subtitle: '@mysecretwine (provisional)',
+                  onTap: _launchTelegram,
                 ),
                 
                 const SizedBox(height: 24),
@@ -475,7 +473,7 @@ class _ContactoPageState extends State<ContactoPage> {
                 _buildContactItem(
                   icon: Icons.web,
                   title: 'Sitio Web',
-                  subtitle: 'www.lachicadeamarillo.com',
+                  subtitle: 'www.lachicadeamarillo.com/collections/all',
                   onTap: _launchWebsite,
                 ),
                 

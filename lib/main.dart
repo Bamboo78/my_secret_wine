@@ -199,18 +199,148 @@ class _HomePageState extends State<HomePage> {
   Color _getTextColor() => globalThemeNotifier.value ? Colors.white : Colors.black;
   Color _getBorderColor() => globalThemeNotifier.value ? Colors.white : Colors.black;
 
-  void validateInput() {
+  Future<bool?> _showGuestModeWarningDialog() {
+    return showDialog<bool>(
+      context: context,
+      barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(dialogContext).size.width * 0.9,
+            decoration: BoxDecoration(
+              color: _getBackgroundColor(),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: _getBorderColor(), width: 2),
+            ),
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Versión de prueba',
+                  style: TextStyle(
+                    color: _getTextColor(),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Estás accediendo a una versión limitada donde podrás probar con los temas 11, 13, y 19.\n\nPara disfrutar de una experiencia completa debes unirte al club.',
+                  style: TextStyle(
+                    color: _getTextColor(),
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Colors.orange, Colors.purple],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _getBackgroundColor(),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop(true);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Text(
+                        'Entendido',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: _getTextColor(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Colors.orange, Colors.purple],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _getBackgroundColor(),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop(false);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Text(
+                        'Volver',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: _getTextColor(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void validateInput([void Function(VoidCallback)? rebuild]) {
     final email = emailController.text;
     final code = codeController.text;
-    if (generateCode(email) == code) {
-      setState(() {
-        isButtonEnabled = true;
-      });
-    } else {
-      setState(() {
-        isButtonEnabled = false;
-      });
-    }
+    final enabled = generateCode(email) == code;
+
+    final triggerRebuild = rebuild ?? setState;
+    triggerRebuild(() {
+      isButtonEnabled = enabled;
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    codeController.dispose();
+    super.dispose();
   }
 
   Future<void> _toggleTheme() async {
@@ -774,14 +904,20 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(9),
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      _createSmoothRoute(TemarioPage(
-                        audioPlayer: widget.audioPlayer,
-                        isGuestMode: true,
-                      )),
-                    );
+                  onPressed: () async {
+                    final proceed = await _showGuestModeWarningDialog();
+                    if (!context.mounted) return;
+                    if (proceed == true) {
+                      Navigator.push(
+                        context,
+                        _createSmoothRoute(
+                          TemarioPage(
+                            audioPlayer: widget.audioPlayer,
+                            isGuestMode: true,
+                          ),
+                        ),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _getBackgroundColor(),
@@ -823,185 +959,202 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, setDialogState) {
                           return Dialog(
                             backgroundColor: Colors.transparent,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              height: MediaQuery.of(context).size.height * 0.6,
-                              decoration: BoxDecoration(
-                                color: _getBackgroundColor(),
-                                borderRadius: BorderRadius.circular(20),
-                                border: Border.all(color: _getBorderColor(), width: 2),
-                              ),
-                              padding: const EdgeInsets.all(30),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          try {
-                                            final Uri url = Uri.parse('https://www.lachicadeamarillo.com/collections/all');
-                                            bool canLaunch = await canLaunchUrl(url);
-                                            debugPrint('Popup 2 - Can launch URL: $canLaunch');
-                                            if (canLaunch) {
-                                              bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
-                                              debugPrint('Popup 2 - URL launched: $launched');
-                                            } else {
-                                              debugPrint('Popup 2 - Cannot launch URL, trying fallback');
-                                              await launchUrl(url);
-                                            }
-                                          } catch (e) {
-                                            debugPrint('Popup 2 - Error launching URL: $e');
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    GestureDetector(
-                                      onTap: () async {
-                                        try {
-                                          final Uri url = Uri.parse('https://www.lachicadeamarillo.com/collections/all');
-                                          bool canLaunch = await canLaunchUrl(url);
-                                          debugPrint('Popup 2 Icon - Can launch URL: $canLaunch');
-                                          if (canLaunch) {
-                                            bool launched = await launchUrl(url, mode: LaunchMode.externalApplication);
-                                            debugPrint('Popup 2 Icon - URL launched: $launched');
-                                          } else {
-                                            debugPrint('Popup 2 Icon - Cannot launch URL, trying fallback');
-                                            await launchUrl(url);
-                                          }
-                                        } catch (e) {
-                                          debugPrint('Popup 2 Icon - Error launching URL: $e');
-                                        }
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 30,
-                                        backgroundColor: _getBackgroundColor(),
-                                        backgroundImage: const AssetImage('assets/icons/app_icon.png'),
-                                      ),
-                                    ),
-                                  ],
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                constraints: BoxConstraints(
+                                  maxHeight: MediaQuery.of(context).size.height * 0.75,
                                 ),
-                                const SizedBox(height: 20),
-                                TextField(
-                                  controller: emailController,
-                                  onChanged: (value) => validateInput(),
-                                  keyboardType: TextInputType.emailAddress,
-                                  autocorrect: false,
-                                  enableSuggestions: false,
-                                  decoration: InputDecoration(
-                                    hintText: 'email',
-                                    hintStyle: TextStyle(color: globalThemeNotifier.value ? Colors.grey[400] : Colors.grey[600], fontFamily: 'Montserrat'),
-                                    filled: true,
-                                    fillColor: _getBackgroundColor(),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: _getBorderColor()),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(color: Colors.purple, width: 2),
-                                    ),
-                                  ),
-                                  style: TextStyle(color: _getTextColor()),
+                                decoration: BoxDecoration(
+                                  color: _getBackgroundColor(),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: _getBorderColor(), width: 2),
                                 ),
-                                const SizedBox(height: 20),
-                                TextField(
-                                  controller: codeController,
-                                  onChanged: (value) => validateInput(),
-                                  obscureText: !isPasswordVisible,
-                                  autocorrect: false,
-                                  enableSuggestions: false,
-                                  decoration: InputDecoration(
-                                    hintText: 'Contraseña',
-                                    hintStyle: TextStyle(color: globalThemeNotifier.value ? Colors.grey[400] : Colors.grey[600], fontFamily: 'Montserrat'),
-                                    filled: true,
-                                    fillColor: _getBackgroundColor(),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: BorderSide(color: _getBorderColor()),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(color: Colors.purple, width: 2),
-                                    ),
-                                    suffixIcon: IconButton(
-                                      icon: ShaderMask(
-                                        shaderCallback: (bounds) => const LinearGradient(
-                                          colors: [Colors.orange, Colors.purple],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        ).createShader(bounds),
-                                        child: Icon(
-                                          isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                          color: Colors.white,
-                                          size: 28, // Más grande
+                                padding: const EdgeInsets.all(30),
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: InkWell(
+                                              onTap: () async {
+                                                try {
+                                                  final Uri url = Uri.parse('https://www.lachicadeamarillo.com/collections/all');
+                                                  final canLaunch = await canLaunchUrl(url);
+                                                  debugPrint('Popup 2 - Can launch URL: $canLaunch');
+                                                  if (canLaunch) {
+                                                    final launched = await launchUrl(url, mode: LaunchMode.externalApplication);
+                                                    debugPrint('Popup 2 - URL launched: $launched');
+                                                  } else {
+                                                    debugPrint('Popup 2 - Cannot launch URL, trying fallback');
+                                                    await launchUrl(url);
+                                                  }
+                                                } catch (e) {
+                                                  debugPrint('Popup 2 - Error launching URL: $e');
+                                                }
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                                child: Text(
+                                                  'Accede a La Chica de Amarillo para conseguir tu código de acceso',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: _getTextColor(),
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              try {
+                                                final Uri url = Uri.parse('https://www.lachicadeamarillo.com/collections/all');
+                                                final canLaunch = await canLaunchUrl(url);
+                                                debugPrint('Popup 2 Icon - Can launch URL: $canLaunch');
+                                                if (canLaunch) {
+                                                  final launched = await launchUrl(url, mode: LaunchMode.externalApplication);
+                                                  debugPrint('Popup 2 Icon - URL launched: $launched');
+                                                } else {
+                                                  debugPrint('Popup 2 Icon - Cannot launch URL, trying fallback');
+                                                  await launchUrl(url);
+                                                }
+                                              } catch (e) {
+                                                debugPrint('Popup 2 Icon - Error launching URL: $e');
+                                              }
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 30,
+                                              backgroundColor: _getBackgroundColor(),
+                                              backgroundImage: const AssetImage('assets/icons/app_icon.png'),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      TextField(
+                                        controller: emailController,
+                                        onChanged: (value) => validateInput(setDialogState),
+                                        keyboardType: TextInputType.emailAddress,
+                                        autocorrect: false,
+                                        enableSuggestions: false,
+                                        decoration: InputDecoration(
+                                          hintText: 'email',
+                                          hintStyle: TextStyle(color: globalThemeNotifier.value ? Colors.grey[400] : Colors.grey[600], fontFamily: 'Montserrat'),
+                                          filled: true,
+                                          fillColor: _getBackgroundColor(),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide(color: _getBorderColor()),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: const BorderSide(color: Colors.purple, width: 2),
+                                          ),
+                                        ),
+                                        style: TextStyle(color: _getTextColor()),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      TextField(
+                                        controller: codeController,
+                                        onChanged: (value) => validateInput(setDialogState),
+                                        obscureText: !isPasswordVisible,
+                                        autocorrect: false,
+                                        enableSuggestions: false,
+                                        decoration: InputDecoration(
+                                          hintText: 'Contraseña',
+                                          hintStyle: TextStyle(color: globalThemeNotifier.value ? Colors.grey[400] : Colors.grey[600], fontFamily: 'Montserrat'),
+                                          filled: true,
+                                          fillColor: _getBackgroundColor(),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: BorderSide(color: _getBorderColor()),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                            borderSide: const BorderSide(color: Colors.purple, width: 2),
+                                          ),
+                                          suffixIcon: IconButton(
+                                            icon: ShaderMask(
+                                              shaderCallback: (bounds) => const LinearGradient(
+                                                colors: [Colors.orange, Colors.purple],
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                              ).createShader(bounds),
+                                              child: Icon(
+                                                isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                                                color: Colors.white,
+                                                size: 28,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              setDialogState(() {
+                                                isPasswordVisible = !isPasswordVisible;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        style: TextStyle(color: _getTextColor()),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          gradient: isButtonEnabled
+                                              ? const LinearGradient(
+                                                  colors: [Colors.orange, Colors.purple],
+                                                  begin: Alignment.bottomCenter,
+                                                  end: Alignment.topCenter,
+                                                )
+                                              : null,
+                                          border: isButtonEnabled ? null : Border.all(color: _getBorderColor(), width: 2),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        padding: isButtonEnabled ? const EdgeInsets.all(2) : EdgeInsets.zero,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: _getBackgroundColor(),
+                                            borderRadius: BorderRadius.circular(isButtonEnabled ? 8 : 10),
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: isButtonEnabled
+                                                ? () {
+                                                    Navigator.push(
+                                                      context,
+                                                      _createSmoothRoute(TemarioPage(audioPlayer: widget.audioPlayer)),
+                                                    );
+                                                  }
+                                                : null,
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.transparent,
+                                              foregroundColor: _getTextColor(),
+                                              disabledForegroundColor: globalThemeNotifier.value ? Colors.grey[600] : Colors.grey[400],
+                                              shadowColor: Colors.transparent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(isButtonEnabled ? 8 : 10),
+                                              ),
+                                              elevation: 0,
+                                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                            ),
+                                            child: Text(
+                                              'Entrar',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: globalThemeNotifier.value ? Colors.white : Colors.black,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      onPressed: () {
-                                        setDialogState(() {
-                                          isPasswordVisible = !isPasswordVisible;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  style: TextStyle(color: _getTextColor()),
-                                ),
-                                const SizedBox(height: 20),
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    gradient: isButtonEnabled 
-                                      ? const LinearGradient(
-                                          colors: [Colors.orange, Colors.purple],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        )
-                                      : null,
-                                    border: isButtonEnabled 
-                                      ? null 
-                                      : Border.all(color: _getBorderColor(), width: 2),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  padding: isButtonEnabled ? const EdgeInsets.all(2) : EdgeInsets.zero,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: _getBackgroundColor(),
-                                      borderRadius: BorderRadius.circular(isButtonEnabled ? 8 : 10),
-                                    ),
-                                    child: ElevatedButton(
-                                      onPressed: isButtonEnabled
-                                          ? () {
-                                              Navigator.push(
-                                                context,
-                                                _createSmoothRoute(TemarioPage(audioPlayer: widget.audioPlayer)),
-                                              );
-                                            }
-                                          : null,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.transparent,
-                                        foregroundColor: _getTextColor(),
-                                        disabledForegroundColor: globalThemeNotifier.value ? Colors.grey[600] : Colors.grey[400],
-                                        shadowColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(isButtonEnabled ? 8 : 10),
-                                        ),
-                                        elevation: 0,
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
-                                      ),
-                                      child: Text(
-                                        'Entrar', 
-                                        style: TextStyle(
-                                          fontSize: 16, 
-                                          fontWeight: FontWeight.bold,
-                                          color: globalThemeNotifier.value ? Colors.white : Colors.black,
-                                        ),
-                                      ),
-                                    ),
+                                    ],
                                   ),
                                 ),
-                                ],
                               ),
                             ),
                           );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/temas_content.dart';
-import '../data/test_preguntas.dart';
+import 'temas_content.dart';
+import 'test_preguntas.dart';
 import 'dart:math' as math;
 import 'dart:async';
 import '../main.dart';
@@ -28,6 +28,8 @@ class TemaDetallePage extends StatefulWidget {
   State<TemaDetallePage> createState() => _TemaDetallePageState();
 }
 
+enum _FichaTipo { foto, cata, tips, generic }
+
 class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderStateMixin {
   int preguntaActual = 0;
   int respuestasCorrectas = 0;
@@ -35,11 +37,13 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
   bool isMusicPlaying = false; // La música no suena desde el inicio
   Map<int, AnimationController> fichaControllers = {}; // Controladores de animación por ficha
   bool testAttempted = false; // Para saber si el test ya fue intentado
+  int testAttempts = 0; // Número de intentos realizados (máximo 2)
+  bool testPassed = false; // Si el test ya fue aprobado
 
   @override
   void initState() {
     super.initState();
-    _loadTestAttemptedState();
+    _loadTestProgress();
   }
 
   @override
@@ -287,7 +291,14 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
           padding: const EdgeInsets.only(top: 12.0),
           child: Text(
             _extractTitleOnly(widget.temaTitle),
-            style: TextStyle(color: _getTextColor()),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: _getTextColor(),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ), //título del appbar
         centerTitle: true,
@@ -411,7 +422,13 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                       child: Text(
-                        testAttempted ? 'Vuelve a intentarlo!' : 'Demuestra lo que sabes!',
+                        testPassed
+                            ? 'Test aprobado'
+                            : (testAttempts >= 2
+                                ? 'Intentos agotados'
+                                : (testAttempted
+                                    ? 'Vuelve a intentarlo!'
+                                    : 'Demuestra lo que sabes!')),
                         style: TextStyle(
                           fontSize: 16, 
                           fontWeight: FontWeight.bold, 
@@ -441,8 +458,90 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
     return fullTitle;
   }
 
-  Widget _buildFichaTema(FichaTema ficha, int index) {
+  _FichaTipo _fichaTipoFromIndex(int fichaIndexWithinTema) {
+    switch (fichaIndexWithinTema) {
+      case 0:
+        return _FichaTipo.foto;
+      case 1:
+        return _FichaTipo.cata;
+      case 2:
+        return _FichaTipo.tips;
+      default:
+        return _FichaTipo.generic;
+    }
+  }
+
+  String _fotoAssetPathForTema() {
+    // Convención: añade una imagen por tema en assets/images/tema_<n>.png
+    // Ejemplo: assets/images/tema_1.png
+    return 'assets/images/tema_${widget.temaNumber}.png';
+  }
+
+  Widget _buildFichaFront(_FichaTipo tipo) {
+    switch (tipo) {
+      case _FichaTipo.foto:
+        return Container(
+          key: const ValueKey('ficha_foto_front'),
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              _fotoAssetPathForTema(),
+              height: 110,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  'assets/images/app_icon.png',
+                  height: 180,
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
+          ),
+        );
+      case _FichaTipo.cata:
+        return _buildFichaLabelFront('CATA');
+      case _FichaTipo.tips:
+        return _buildFichaLabelFront('TIPS');
+      case _FichaTipo.generic:
+        return _buildFichaLabelFront('FICHA');
+    }
+  }
+
+  Widget _buildFichaLabelFront(String label) {
+    return Container(
+      key: const ValueKey('ficha_label_front'),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.style,
+            color: _getTextColor(),
+            size: 30,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            label,
+            style: TextStyle(
+              color: globalThemeNotifier.value ? Colors.white : Colors.black,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFichaTema(FichaTema ficha, int index, int fichaIndexWithinTema) {
+    final tipo = _fichaTipoFromIndex(fichaIndexWithinTema);
     bool estaVolteada = fichasVolteadas.contains(index);
+    const double fichaFixedHeight = 180;
     
     if (!fichaControllers.containsKey(index)) {
       fichaControllers[index] = AnimationController(
@@ -472,87 +571,62 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
             await controller.forward();
           }
         },
-        child: AnimatedBuilder(
-          animation: controller,
-          builder: (context, child) {
-            // Usar curva suave para la animación
-            final animationValue = Curves.easeInOut.transform(controller.value);
-            final isShowingFront = animationValue < 0.5;
-            
-            return Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001) // Perspectiva
-                ..rotateY(animationValue * math.pi),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: isShowingFront 
-                      ? [Colors.orange, Colors.purple]  
-                      : [Colors.orange, Colors.purple], 
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: globalThemeNotifier.value 
-                        ? Colors.white.withValues(alpha: 0.5)
-                        : Colors.black.withValues(alpha: 0.5),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(2),
+        child: SizedBox(
+          height: fichaFixedHeight,
+          child: AnimatedBuilder(
+            animation: controller,
+            builder: (context, child) {
+              // Usar curva suave para la animación
+              final animationValue = Curves.easeInOut.transform(controller.value);
+              final isShowingFront = animationValue < 0.5;
+
+              return Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001) // Perspectiva
+                  ..rotateY(animationValue * math.pi),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: isShowingFront 
-                      ? (globalThemeNotifier.value ? Colors.black : Colors.white)
-                      : (globalThemeNotifier.value ? Colors.white : Colors.black),
+                    gradient: LinearGradient(
+                      colors: isShowingFront
+                          ? [Colors.orange, Colors.purple]
+                          : [Colors.orange, Colors.purple],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
                     borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.all(16),
-                  child: isShowingFront
-                    ? _buildPreguntaWidget(ficha.pregunta)
-                    : Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()..rotateY(math.pi),
-                        child: _buildRespuestaWidget(ficha.respuesta),
+                    boxShadow: [
+                      BoxShadow(
+                        color: globalThemeNotifier.value
+                            ? Colors.white.withValues(alpha: 0.5)
+                            : Colors.black.withValues(alpha: 0.5),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
                       ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isShowingFront
+                          ? (globalThemeNotifier.value ? Colors.black : Colors.white)
+                          : (globalThemeNotifier.value ? Colors.white : Colors.black),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: isShowingFront
+                        ? _buildFichaFront(tipo)
+                        : Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()..rotateY(math.pi),
+                            child: _buildRespuestaWidget(ficha.respuesta),
+                          ),
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildPreguntaWidget(String pregunta) { //preguntas de las fichas
-    return Container(
-      key: const ValueKey('pregunta'),
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.help_outline,
-            color: _getTextColor(),
-            size: 30,
-          ),
-          const SizedBox(height: 12),
-          Text(
-            pregunta,
-            style: TextStyle(
-              color: globalThemeNotifier.value ? Colors.white : Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
       ),
     );
   }
@@ -581,13 +655,16 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
   }
 
   Widget _buildContenidoConFichas(TemaContent temaContent) {
-    List<Widget> widgets = [];
-    
+    final List<Widget> widgets = [];
+    var fichaIndexWithinTema = 0;
+
     for (int i = 0; i < temaContent.contenido.length; i++) {
-      var item = temaContent.contenido[i];
-      
+      final item = temaContent.contenido[i];
+
       if (item is String) {
-        // Es texto normal
+        if (widgets.isNotEmpty) {
+          widgets.add(const SizedBox(height: 16));
+        }
         widgets.add(
           Text(
             item,
@@ -600,17 +677,15 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
           ),
         );
       } else if (item is FichaTema) {
-        // Es una ficha
-        widgets.add(_buildFichaTema(item, i));
-      }
-      
-      // Agregar espacio entre elementos (excepto al final)
-      if (i < temaContent.contenido.length - 1) {
-        widgets.add(const SizedBox(height: 16));
+        // Mantener índice estable para los controladores de animación.
+        if (widgets.isNotEmpty) {
+          widgets.add(const SizedBox(height: 16));
+        }
+        widgets.add(_buildFichaTema(item, i, fichaIndexWithinTema));
+        fichaIndexWithinTema++;
       }
     }
 
-    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: widgets,
@@ -620,6 +695,21 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
 
 
   void _mostrarPractica() { // Iniciar test directamente
+    if (testPassed) {
+      _mostrarMensajeTestRestringido(
+        titulo: 'Test ya aprobado',
+        mensaje: 'Este test ya está aprobado, no puede repetirse. Puedes volver al temario cuando quieras.',
+      );
+      return;
+    }
+    if (testAttempts >= 2) {
+      _mostrarMensajeTestRestringido(
+        titulo: 'Intentos agotados',
+        mensaje: 'Has agotado los 2 intentos disponibles para este tema. Puedes repasar el contenido y volver al temario.',
+      );
+      return;
+    }
+
     final preguntas = TestPorTema.preguntasPorTema[widget.temaNumber] ?? [];
     if (preguntas.isEmpty) {
       _mostrarMensajeNoHayTest();
@@ -630,6 +720,90 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
       });
       _mostrarTest(preguntas);
     }
+  }
+
+  void _mostrarMensajeTestRestringido({
+    required String titulo,
+    required String mensaje,
+  }) {
+    _showDialogWithFade(
+      context: context,
+      barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.4,
+            decoration: BoxDecoration(
+              color: _getBackgroundColor(),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: _getBorderColor(), width: 2),
+            ),
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  titulo,
+                  style: TextStyle(
+                    color: _getTextColor(),
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  mensaje,
+                  style: TextStyle(color: _getTextColor(), fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Colors.orange, Colors.purple],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.all(2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: _getBackgroundColor(),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _getBackgroundColor(),
+                        foregroundColor: _getTextColor(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: Text(
+                        'Entendido',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: _getTextColor(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _mostrarMensajeNoHayTest() { //popup de no hay test disponible en este tema
@@ -1068,7 +1242,7 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
     );
   }
 
-  void _mostrarResultadoFinal(int totalPreguntas) {
+  Future<void> _mostrarResultadoFinal(int totalPreguntas) async {
     String mensaje;
     bool testPasado = false;
     String copaState = 'empty'; // Estado de la copa: empty, half, full
@@ -1116,10 +1290,24 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
 
     // Siempre guardar el estado de la copa (indica que el test fue intentado)
     _saveGlassState(widget.temaNumber, copaState);
+
+    // Registrar intento y, si procede, marcar como aprobado.
+    final prefs = await SharedPreferences.getInstance();
+    final attemptsKey = 'test_attempts_${widget.temaNumber}';
+    final passedKey = 'test_passed_${widget.temaNumber}';
+    final currentAttempts = prefs.getInt(attemptsKey) ?? 0;
+    final newAttempts = currentAttempts + 1;
+    await prefs.setInt(attemptsKey, newAttempts);
+    if (testPasado) {
+      await prefs.setBool(passedKey, true);
+    }
+    if (!mounted) return;
     
     // Actualizar el estado local para que el botón cambie inmediatamente
     setState(() {
-      testAttempted = true;
+      testAttempts = newAttempts;
+      testPassed = testPassed || testPasado;
+      testAttempted = testAttempts > 0 && !testPassed;
     });
     
     // Si el test se pasó exitosamente, desbloquear el siguiente tema
@@ -1222,55 +1410,6 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
                         ),
                         child: Text(
                           'Volver al Temario',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
-                        ),
-                      ),
-                    ),
-                  ),
-                  
-                  // Botón "Reiniciar test" para borrar resultados anteriores
-                  const SizedBox(height: 12),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Colors.orange, Colors.purple],
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(2),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _getBackgroundColor(),
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          // Borrar resultados del test actual
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.remove('tema_${widget.temaNumber}_completado');
-                          await prefs.remove('tema_${widget.temaNumber}_resultado');
-                          
-                          if (!context.mounted) return;
-                          // Cerrar el diálogo
-                          Navigator.of(context).pop();
-                          
-                          // Iniciar nuevo test
-                          _mostrarPractica();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _getBackgroundColor(),
-                          foregroundColor: _getTextColor(),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: Text(
-                          'Reiniciar test',
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: _getTextColor()),
                         ),
                       ),
@@ -1490,12 +1629,21 @@ class _TemaDetallePageState extends State<TemaDetallePage> with TickerProviderSt
     );
   }
 
-  // Método para cargar si el test ya fue intentado
-  Future<void> _loadTestAttemptedState() async {
+  Future<void> _loadTestProgress() async {
     final prefs = await SharedPreferences.getInstance();
-    String? savedState = prefs.getString('glass_state_${widget.temaNumber}');
+    final attemptsKey = 'test_attempts_${widget.temaNumber}';
+    final passedKey = 'test_passed_${widget.temaNumber}';
+    final loadedAttempts = prefs.getInt(attemptsKey) ?? 0;
+    var loadedPassed = prefs.getBool(passedKey) ?? false;
+    // Compatibilidad: en el tema 22 antes solo se persistía 'prueba_final_aprobada'.
+    if (!loadedPassed && widget.temaNumber == 22) {
+      loadedPassed = prefs.getBool('prueba_final_aprobada') ?? false;
+    }
+    if (!mounted) return;
     setState(() {
-      testAttempted = savedState != null && savedState != 'empty';
+      testAttempts = loadedAttempts;
+      testPassed = loadedPassed;
+      testAttempted = testAttempts > 0 && !testPassed;
     });
   }
 

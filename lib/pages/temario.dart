@@ -39,27 +39,27 @@ class _TemarioPageState extends State<TemarioPage>
       _pendingUnlockTheme; // Tema pendiente de desbloquear al volver a la pantalla
 
   final List<String> _temaTitles = [
-    '1 - Historia del vino.\nDel mito a la copa.',
-    '2 - La vid y sus secretos.',
-    '3 - Proceso de elaboración.',
-    '4 - Tinto. Cuerpo y carácter.',
-    '5 - Blanco. Frescura y elegancia.',
-    '6 - Rosado. Equilibrio y versatilidad.',
-    '7 - Espumoso. Magia en las burbujas.',
-    '8 - Dulce. Placer en cada sorbo.',
-    '9 - La cata paso a paso.',
-    '10 - La temperatura perfecta.',
-    '11 - La copa perfecta.',
-    '12 - Historia del arte y vino.',
-    '13 - Maridajes que enamoran.',
-    '14 - Vino y música.\nArmonía perfecta.',
-    '15 - Rutas del vino del mundo.',
-    '16 - El vino como ritual social.',
-    '17 - Cómo leer la etiqueta.',
-    '18 - Conservación y servicio.',
-    '19 - Cómo elegir el vino.',
-    '20 - Vinos del futuro.\nSostenibilidad y tecnología.',
-    '21 - Cómo crear tu bodega en casa.',
+    '1 - La historia del vino.\n“La sangre de la tierra que ha escrito la historia de la humanidad.”',
+    '2 - La vid y sus secretos.\n“En el silencio del viñedo, la tierra encuentra su propia voz.”',
+    '3 - Proceso de elaboración.\n“Del campo a la copa: la alquimia del tiempo y la tierra.”',
+    '4 - Tintos. Cuerpo y carácter.\n“El vino tinto no se bebe… se conversa.”',
+    '5 - Blancos. Frescura y elegancia.\n“Un buen blanco es como el verano: ligero, brillante y fugaz.”',
+    '6 - Rosados. Equilibrio y versatilidad.\n“El rosado no elige bandos: conquista a todos los paladares.”',
+    '7 - Espumosos. Magia en las burbujas.\n“Cada burbuja es un aplauso pequeño que celebra la vida.”',
+    '8 - Dulces. Placer en cada sorbo.\n“Los vinos dulces son el postre de los dioses… y el secreto de los mortales felices.”',
+    '9 - La cata paso a paso.\n“Catar es escuchar lo que el vino tiene que decir, sin interrumpirlo.”',
+    '10 - La temperatura perfecta.\n“Un vino fuera de temperatura es como una canción desafinada.”',
+    '11 - La copa perfecta.\n“La copa correcta convierte un buen vino en una experiencia memorable.”',
+    '12 - Historia del arte y vino.\n“El arte pinta lo que el vino hace sentir.”',
+    '13 - Maridajes que enamoran.\n“Un buen maridaje no se explica… se saborea.”',
+    '14 - Vino y música.\n“El vino entra por la boca… pero la música lo hace bailar.”',
+    '15 - Rutas del vino del mundo.\n “Quien viaja y bebe vino, vive dos veces.”',
+    '16 - El vino como ritual social.\n“El vino sabe mejor cuando se comparte… y se recuerda.”',
+    '17 - Cómo leer la etiqueta.\n“Cada etiqueta es una carta de amor escrita por el viñedo.”',
+    '18 - Conservación y servicio.\n“Cuidar un vino es cuidar el tiempo embotellado.”',
+    '19 - Cómo elegir el vino.\n“El mejor vino no es el más caro, sino el que se comparte.”',
+    '20 - Vinos del futuro.\nSostenibilidad y tecnología.\n“El futuro del vino se cultiva con respeto y se brinda con conciencia.”',
+    '21 - Cómo crear tu bodega en casa.\n“Una bodega es un diario de recuerdos líquidos.”',
     'Última prueba.\nDemuestra lo aprendido.',
   ];
 
@@ -120,11 +120,8 @@ class _TemarioPageState extends State<TemarioPage>
     // Iniciar animaciones de entrada
     _startEntryAnimations();
 
-    if (widget.isGuestMode) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showGuestModeWarning();
-      });
-    }
+    // En modo invitado mostramos el aviso antes de navegar (en Home)
+    // para evitar que se abra automáticamente al entrar en esta pantalla.
   }
 
   void _startEntryAnimations() {
@@ -819,7 +816,7 @@ class _TemarioPageState extends State<TemarioPage>
                           if (pruebaFinalAprobada) {
                             Navigator.push(
                               context,
-                              _createSmoothRoute(const ContactoPage()),
+                              _createSmoothRoute(const FelicidadesPage()),
                             );
                           } else {
                             _mostrarDialogoContactoBloqueado();
@@ -842,10 +839,9 @@ class _TemarioPageState extends State<TemarioPage>
                                     state: WineGlassState.full,
                                     size: 32,
                                   )
-                                : Image.asset(
-                                    'assets/icons/vacia.png',
-                                    width: 32,
-                                    height: 32,
+                                : const WineGlassSvgGradient(
+                                    state: WineGlassState.empty,
+                                    size: 32,
                                   ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -887,10 +883,9 @@ class _TemarioPageState extends State<TemarioPage>
                                     state: WineGlassState.full,
                                     size: 32,
                                   )
-                                : Image.asset(
-                                    'assets/icons/vacia.png',
-                                    width: 32,
-                                    height: 32,
+                                : const WineGlassSvgGradient(
+                                    state: WineGlassState.empty,
+                                    size: 32,
                                   ),
                           ],
                         ),
@@ -1190,10 +1185,9 @@ class _TemarioPageState extends State<TemarioPage>
       case 'empty':
       default:
         // Copa vacía - Test no completado o menos de 4 correctas
-        return Image.asset(
-          'assets/icons/vacia.png',
-          width: 32,
-          height: 32,
+        return const WineGlassSvgGradient(
+          state: WineGlassState.empty,
+          size: 32,
         );
     }
   }
@@ -1490,134 +1484,8 @@ class _TemarioPageState extends State<TemarioPage>
     );
   }
 
-  void _showGuestModeWarning() {
-    _showDialogWithFade(
-      context: context,
-      barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: BoxDecoration(
-              color: _getBackgroundColor(),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: _getBorderColor(), width: 2),
-            ),
-            padding: const EdgeInsets.all(30),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Versión de prueba',
-                  style: TextStyle(
-                    color: _getTextColor(),
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Estás accediendo a una versión limitada. Podrás ver algunos temas de ejemplo, pero para disfrutar de la experiencia completa y guardar tu progreso, debes unirte al club.',
-                  style: TextStyle(
-                    color: _getTextColor(),
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 30),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.orange, Colors.purple],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.all(2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: _getBackgroundColor(),
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _getBackgroundColor(),
-                        foregroundColor: _getTextColor(),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        'Entendido',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: _getTextColor(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Colors.orange, Colors.purple],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding: const EdgeInsets.all(2),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: _getBackgroundColor(),
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _getBackgroundColor(),
-                        foregroundColor: _getTextColor(),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        elevation: 0,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: Text(
-                        'Volver',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: _getTextColor(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // Función para crear transiciones suaves entre páginas
-  Route<T> _createSmoothRoute<T extends Object?>(Widget page) {
+ 
+  Route<T> _createSmoothRoute<T extends Object?>(Widget page) { // Función para crear transiciones suaves entre páginas
     return PageRouteBuilder<T>(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionDuration: const Duration(milliseconds: 600),
