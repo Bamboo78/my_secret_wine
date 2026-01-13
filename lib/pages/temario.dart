@@ -38,6 +38,10 @@ class _TemarioPageState extends State<TemarioPage>
   int?
       _pendingUnlockTheme; // Tema pendiente de desbloquear al volver a la pantalla
 
+  void _backToHome() {
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
   final List<String> _temaTitles = [
     '1 - La historia del vino.\n“La sangre de la tierra que ha escrito la historia de la humanidad.”',
     '2 - La vid y sus secretos.\n“En el silencio del viñedo, la tierra encuentra su propia voz.”',
@@ -58,7 +62,7 @@ class _TemarioPageState extends State<TemarioPage>
     '17 - Cómo leer la etiqueta.\n“Cada etiqueta es una carta de amor escrita por el viñedo.”',
     '18 - Conservación y servicio.\n“Cuidar un vino es cuidar el tiempo embotellado.”',
     '19 - Cómo elegir el vino.\n“El mejor vino no es el más caro, sino el que se comparte.”',
-    '20 - Vinos del futuro.\nSostenibilidad y tecnología.\n“El futuro del vino se cultiva con respeto y se brinda con conciencia.”',
+    '20 - Vinos del futuro. Sostenibilidad y tecnología.\n“El futuro del vino se cultiva con respeto y se brinda con conciencia.”',
     '21 - Cómo crear tu bodega en casa.\n“Una bodega es un diario de recuerdos líquidos.”',
     'Última prueba.\nDemuestra lo aprendido.',
   ];
@@ -240,664 +244,680 @@ class _TemarioPageState extends State<TemarioPage>
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: globalThemeNotifier,
-      builder: (context, isDark, child) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: widget.isGuestMode
-                ? Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, top: 16.0, bottom: 16.0),
-                    child: InkWell(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [Colors.orange, Colors.purple],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ).createShader(bounds),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 48,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (!didPop) {
+          // Desde TEMARIO siempre volvemos a la pantalla principal, evitando
+          // quedarnos en rutas intermedias como dialogs (p.ej. "Ya soy parte del brindis").
+          _backToHome();
+        }
+      },
+      child: ValueListenableBuilder<bool>(
+        valueListenable: globalThemeNotifier,
+        builder: (context, isDark, child) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: widget.isGuestMode
+                  ? Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, top: 16.0, bottom: 16.0),
+                      child: InkWell(
+                        onTap: _backToHome,
+                        child: ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [Colors.orange, Colors.purple],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ).createShader(bounds),
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 48,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                : null,
-            leadingWidth: widget.isGuestMode ? 70 : null,
-            title: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'My Secret Wine',
-                style: GoogleFonts.greatVibes(
-                  color: _getTextColor(),
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
+                    )
+                  : null,
+              leadingWidth: widget.isGuestMode ? 70 : null,
+              title: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'My Secret Wine',
+                  style: GoogleFonts.greatVibes(
+                    color: _getTextColor(),
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            centerTitle: true,
-            backgroundColor: _getBackgroundColor(),
-            automaticallyImplyLeading: false,
-            toolbarHeight: 80,
-            actions: [
-              Padding(
-                padding:
-                    const EdgeInsets.only(right: 8.0, top: 16.0, bottom: 16.0),
-                child: InkWell(
-                  onTap: () {
-                    _showDialogWithFade(
-                      context: context,
-                      barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          backgroundColor: Colors.transparent,
-                          child: StatefulBuilder(
-                            builder: (context, setState) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.65,
-                                decoration: BoxDecoration(
-                                  color: _getBackgroundColor(),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                      color: _getBorderColor(), width: 2),
-                                ),
-                                padding: const EdgeInsets.all(30),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceEvenly, // Distribución uniforme
-                                  children: [
-                                    Text(
-                                      '¿Qué deseas hacer?',
-                                      style: TextStyle(
-                                          color: _getTextColor(), fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    const SizedBox(height: 40),
-                                    Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Colors.orange,
-                                            Colors.purple
-                                          ],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
+              centerTitle: true,
+              backgroundColor: _getBackgroundColor(),
+              automaticallyImplyLeading: false,
+              toolbarHeight: 80,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      right: 8.0, top: 16.0, bottom: 16.0),
+                  child: InkWell(
+                    onTap: () {
+                      _showDialogWithFade(
+                        context: context,
+                        barrierColor: const Color.fromRGBO(0, 0, 0, 0.8),
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            backgroundColor: Colors.transparent,
+                            child: StatefulBuilder(
+                              builder: (context, setState) {
+                                return Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.65,
+                                  decoration: BoxDecoration(
+                                    color: _getBackgroundColor(),
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                        color: _getBorderColor(), width: 2),
+                                  ),
+                                  padding: const EdgeInsets.all(30),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceEvenly, // Distribución uniforme
+                                    children: [
+                                      Text(
+                                        '¿Qué deseas hacer?',
+                                        style: TextStyle(
+                                            color: _getTextColor(),
+                                            fontSize: 20),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      padding: const EdgeInsets.all(
-                                          2), // Padding para el borde gradiente
-                                      child: Container(
+                                      const SizedBox(height: 40),
+                                      Container(
+                                        width: double.infinity,
                                         decoration: BoxDecoration(
-                                          color: _getBackgroundColor(),
-                                          borderRadius:
-                                              BorderRadius.circular(9),
-                                        ),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              _toggleMusic();
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                _getBackgroundColor(),
-                                            foregroundColor: _getTextColor(),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(9),
-                                            ),
-                                            elevation: 0,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                isMusicPlaying
-                                                    ? Icons.volume_up
-                                                    : Icons.volume_off,
-                                                color: _getTextColor(),
-                                                size: 24,
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Text(
-                                                isMusicPlaying
-                                                    ? 'Silenciar música'
-                                                    : 'Activar música',
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                              ),
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.orange,
+                                              Colors.purple
                                             ],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                        height:
-                                            20), // Más separación entre botones
-                                    // Botón de cambiar contraste
-                                    Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Colors.orange,
-                                            Colors.purple
-                                          ],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      padding: const EdgeInsets.all(
-                                          2), // Padding para el borde gradiente
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: _getBackgroundColor(),
                                           borderRadius:
-                                              BorderRadius.circular(9),
+                                              BorderRadius.circular(10),
                                         ),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              toggleGlobalTheme();
-                                            });
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                _getBackgroundColor(),
-                                            foregroundColor: _getTextColor(),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(9),
+                                        padding: const EdgeInsets.all(
+                                            2), // Padding para el borde gradiente
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: _getBackgroundColor(),
+                                            borderRadius:
+                                                BorderRadius.circular(9),
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                _toggleMusic();
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  _getBackgroundColor(),
+                                              foregroundColor: _getTextColor(),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(9),
+                                              ),
+                                              elevation: 0,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
                                             ),
-                                            elevation: 0,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                globalThemeNotifier.value
-                                                    ? Icons.light_mode
-                                                    : Icons.dark_mode,
-                                                color: _getTextColor(),
-                                                size: 24,
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Text(
-                                                globalThemeNotifier.value
-                                                    ? 'Tema claro'
-                                                    : 'Tema oscuro',
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                              ),
-                                            ],
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  isMusicPlaying
+                                                      ? Icons.volume_up
+                                                      : Icons.volume_off,
+                                                  color: _getTextColor(),
+                                                  size: 24,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Text(
+                                                  isMusicPlaying
+                                                      ? 'Silenciar música'
+                                                      : 'Activar música',
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Colors.orange,
-                                            Colors.purple
-                                          ],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        ),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      padding: const EdgeInsets.all(
-                                          2), // Padding para el borde gradiente
-                                      child: Container(
+                                      const SizedBox(
+                                          height:
+                                              20), // Más separación entre botones
+                                      // Botón de cambiar contraste
+                                      Container(
+                                        width: double.infinity,
                                         decoration: BoxDecoration(
-                                          color: _getBackgroundColor(),
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.orange,
+                                              Colors.purple
+                                            ],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
                                           borderRadius:
-                                              BorderRadius.circular(9),
+                                              BorderRadius.circular(10),
                                         ),
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Cierra el popup actual
-                                            // Muestra popup de confirmación
-                                            _showDialogWithFade(
-                                              context: context,
-                                              barrierColor:
-                                                  const Color.fromRGBO(
-                                                      0, 0, 0, 0.8),
-                                              builder: (BuildContext context) {
-                                                return Dialog(
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.3,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          _getBackgroundColor(),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      border: Border.all(
-                                                          color:
-                                                              _getBorderColor(),
-                                                          width: 2),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            30),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceEvenly,
-                                                      children: [
-                                                        Text(
-                                                          '¿Estás seguro?',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  _getTextColor(),
-                                                              fontSize: 20),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 30),
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  gradient:
-                                                                      const LinearGradient(
-                                                                    colors: [
-                                                                      Colors
-                                                                          .orange,
-                                                                      Colors
-                                                                          .purple
-                                                                    ],
-                                                                    begin: Alignment
-                                                                        .bottomCenter,
-                                                                    end: Alignment
-                                                                        .topCenter,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(2),
+                                        padding: const EdgeInsets.all(
+                                            2), // Padding para el borde gradiente
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: _getBackgroundColor(),
+                                            borderRadius:
+                                                BorderRadius.circular(9),
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                toggleGlobalTheme();
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  _getBackgroundColor(),
+                                              foregroundColor: _getTextColor(),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(9),
+                                              ),
+                                              elevation: 0,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  globalThemeNotifier.value
+                                                      ? Icons.light_mode
+                                                      : Icons.dark_mode,
+                                                  color: _getTextColor(),
+                                                  size: 24,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Text(
+                                                  globalThemeNotifier.value
+                                                      ? 'Tema claro'
+                                                      : 'Tema oscuro',
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.orange,
+                                              Colors.purple
+                                            ],
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        padding: const EdgeInsets.all(
+                                            2), // Padding para el borde gradiente
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: _getBackgroundColor(),
+                                            borderRadius:
+                                                BorderRadius.circular(9),
+                                          ),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Cierra el popup actual
+                                              // Muestra popup de confirmación
+                                              _showDialogWithFade(
+                                                context: context,
+                                                barrierColor:
+                                                    const Color.fromARGB(255, 0, 0, 0),
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.3,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            _getBackgroundColor(),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20),
+                                                        border: Border.all(
+                                                            color:
+                                                                _getBorderColor(),
+                                                            width: 2),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              30),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Text(
+                                                            '¿Estás seguro?',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    _getTextColor(),
+                                                                fontSize: 20),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 30),
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
                                                                 child:
                                                                     Container(
                                                                   decoration:
                                                                       BoxDecoration(
-                                                                    color:
-                                                                        _getBackgroundColor(),
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(9),
-                                                                  ),
-                                                                  child:
-                                                                      ElevatedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(); // Cancelar
-                                                                    },
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
-                                                                          _getBackgroundColor(),
-                                                                      foregroundColor:
-                                                                          _getTextColor(),
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(9),
-                                                                      ),
-                                                                      elevation:
-                                                                          0,
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          vertical:
-                                                                              12),
+                                                                    gradient:
+                                                                        const LinearGradient(
+                                                                      colors: [
+                                                                        Colors
+                                                                            .orange,
+                                                                        Colors
+                                                                            .purple
+                                                                      ],
+                                                                      begin: Alignment
+                                                                          .bottomCenter,
+                                                                      end: Alignment
+                                                                          .topCenter,
                                                                     ),
-                                                                    child: Text(
-                                                                        'Cancelar',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            color:
-                                                                                _getTextColor())),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 16),
-                                                            Expanded(
-                                                              child: Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  gradient:
-                                                                      const LinearGradient(
-                                                                    colors: [
-                                                                      Colors
-                                                                          .orange,
-                                                                      Colors
-                                                                          .purple
-                                                                    ],
-                                                                    begin: Alignment
-                                                                        .bottomCenter,
-                                                                    end: Alignment
-                                                                        .topCenter,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(2),
-                                                                child:
-                                                                    Container(
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color:
-                                                                        _getBackgroundColor(),
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             10),
                                                                   ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          2),
                                                                   child:
-                                                                      ElevatedButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      _showExitConfirmationDialog();
-                                                                    },
-                                                                    style: ElevatedButton
-                                                                        .styleFrom(
-                                                                      backgroundColor:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color:
                                                                           _getBackgroundColor(),
-                                                                      foregroundColor:
-                                                                          _getTextColor(),
-                                                                      shape:
-                                                                          RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(9),
-                                                                      ),
-                                                                      elevation:
-                                                                          0,
-                                                                      padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                          vertical:
-                                                                              12),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              9),
                                                                     ),
-                                                                    child: Text(
-                                                                        'Salir',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                14,
-                                                                            color:
-                                                                                _getTextColor())),
+                                                                    child:
+                                                                        ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop(); // Cancelar
+                                                                      },
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        backgroundColor:
+                                                                            _getBackgroundColor(),
+                                                                        foregroundColor:
+                                                                            _getTextColor(),
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(9),
+                                                                        ),
+                                                                        elevation:
+                                                                            0,
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical:
+                                                                                12),
+                                                                      ),
+                                                                      child: Text(
+                                                                          'Cancelar',
+                                                                          style: TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: _getTextColor())),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                              const SizedBox(
+                                                                  width: 16),
+                                                              Expanded(
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    gradient:
+                                                                        const LinearGradient(
+                                                                      colors: [
+                                                                        Colors
+                                                                            .orange,
+                                                                        Colors
+                                                                            .purple
+                                                                      ],
+                                                                      begin: Alignment
+                                                                          .bottomCenter,
+                                                                      end: Alignment
+                                                                          .topCenter,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          2),
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color:
+                                                                          _getBackgroundColor(),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    child:
+                                                                        ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        _showExitConfirmationDialog();
+                                                                      },
+                                                                      style: ElevatedButton
+                                                                          .styleFrom(
+                                                                        backgroundColor:
+                                                                            _getBackgroundColor(),
+                                                                        foregroundColor:
+                                                                            _getTextColor(),
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(9),
+                                                                        ),
+                                                                        elevation:
+                                                                            0,
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical:
+                                                                                12),
+                                                                      ),
+                                                                      child: Text(
+                                                                          'Salir',
+                                                                          style: TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: _getTextColor())),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                _getBackgroundColor(),
-                                            foregroundColor: _getTextColor(),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(9),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  _getBackgroundColor(),
+                                              foregroundColor: _getTextColor(),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(9),
+                                              ),
+                                              elevation: 0,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
                                             ),
-                                            elevation: 0,
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.close,
-                                                color: _getTextColor(),
-                                                size: 24,
-                                              ),
-                                              const SizedBox(width: 12),
-                                              Text(
-                                                'Cerrar la aplicación',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: _getTextColor()),
-                                              ),
-                                            ],
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.close,
+                                                  color: _getTextColor(),
+                                                  size: 24,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Text(
+                                                  'Cerrar la aplicación',
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: _getTextColor()),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [Colors.orange, Colors.purple],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ).createShader(bounds),
-                    child: const Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                      size: 48,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: _getBackgroundColor(),
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: SlideTransition(
-                      position: _slideAnimation,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(16.0),
-                        itemCount: 22,
-                        itemBuilder: (context, index) {
-                          return AnimatedBuilder(
-                            animation: _fadeController,
-                            builder: (context, child) {
-                              return TweenAnimationBuilder<double>(
-                                duration:
-                                    Duration(milliseconds: 300 + (index * 100)),
-                                tween: Tween(begin: 0.0, end: 1.0),
-                                builder: (context, value, child) {
-                                  return Transform.translate(
-                                    offset: Offset(0, 20 * (1 - value)),
-                                    child: Opacity(
-                                      opacity: value,
-                                      child: child,
-                                    ),
-                                  );
-                                },
-                                child: _buildTemarioItem(
-                                    context, _temaTitles[index]),
-                              );
-                            },
+                                      const SizedBox(height: 20),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
                           );
                         },
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  // Botón CATA GUIADA FINAL - bloqueado hasta aprobar Última Prueba
-                  padding: const EdgeInsets.all(16.0),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 800),
-                    curve: Curves.easeInOut,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      gradient: pruebaFinalAprobada
-                          ? const LinearGradient(
-                              colors: [Colors.orange, Colors.purple],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                            )
-                          : LinearGradient(
-                              colors: [
-                                _getBackgroundColor(),
-                                _getBackgroundColor()
-                              ],
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                            ),
-                      border: pruebaFinalAprobada
-                          ? Border.all(color: Colors.transparent, width: 0)
-                          : Border.all(color: _getBorderColor(), width: 1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(2),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: _getBackgroundColor(),
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (pruebaFinalAprobada) {
-                            Navigator.push(
-                              context,
-                              _createSmoothRoute(const FelicidadesPage()),
-                            );
-                          } else {
-                            _mostrarDialogoContactoBloqueado();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _getBackgroundColor(),
-                          foregroundColor: _getTextColor(),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 30),
-                        ),
-                        child: Row(
-                          children: [
-                            pruebaFinalAprobada
-                                ? const WineGlassSvgGradient(
-                                    state: WineGlassState.full,
-                                    size: 32,
-                                  )
-                                : const WineGlassSvgGradient(
-                                    state: WineGlassState.empty,
-                                    size: 32,
-                                  ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    'Cata guiada final',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: _getTextColor(),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    pruebaFinalAprobada
-                                        ? 'Del análisis al disfrute'
-                                        : 'Antes tendrás que aprobar todo.',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: pruebaFinalAprobada
-                                          ? FontWeight.bold
-                                          : FontWeight.bold,
-                                      color: globalThemeNotifier.value
-                                          ? const Color.fromARGB(
-                                              255, 255, 255, 255)
-                                          : const Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            pruebaFinalAprobada
-                                ? const WineGlassSvgGradient(
-                                    state: WineGlassState.full,
-                                    size: 32,
-                                  )
-                                : const WineGlassSvgGradient(
-                                    state: WineGlassState.empty,
-                                    size: 32,
-                                  ),
-                          ],
-                        ),
+                      );
+                    },
+                    child: ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [Colors.orange, Colors.purple],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ).createShader(bounds),
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                        size: 48,
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-        );
-      },
+            backgroundColor: _getBackgroundColor(),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: 22,
+                          itemBuilder: (context, index) {
+                            return AnimatedBuilder(
+                              animation: _fadeController,
+                              builder: (context, child) {
+                                return TweenAnimationBuilder<double>(
+                                  duration: Duration(
+                                      milliseconds: 300 + (index * 100)),
+                                  tween: Tween(begin: 0.0, end: 1.0),
+                                  builder: (context, value, child) {
+                                    return Transform.translate(
+                                      offset: Offset(0, 20 * (1 - value)),
+                                      child: Opacity(
+                                        opacity: value,
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                                  child: _buildTemarioItem(
+                                      context, _temaTitles[index]),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    // Botón CATA GUIADA FINAL - bloqueado hasta aprobar Última Prueba
+                    padding: const EdgeInsets.all(16.0),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeInOut,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: pruebaFinalAprobada
+                            ? const LinearGradient(
+                                colors: [Colors.orange, Colors.purple],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              )
+                            : LinearGradient(
+                                colors: [
+                                  _getBackgroundColor(),
+                                  _getBackgroundColor()
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                        border: pruebaFinalAprobada
+                            ? Border.all(color: Colors.transparent, width: 0)
+                            : Border.all(color: _getBorderColor(), width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(2),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _getBackgroundColor(),
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (pruebaFinalAprobada) {
+                              Navigator.push(
+                                context,
+                                _createSmoothRoute(const FelicidadesPage()),
+                              );
+                            } else {
+                              _mostrarDialogoContactoBloqueado();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _getBackgroundColor(),
+                            foregroundColor: _getTextColor(),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 30),
+                          ),
+                          child: Row(
+                            children: [
+                              pruebaFinalAprobada
+                                  ? const WineGlassSvgGradient(
+                                      state: WineGlassState.full,
+                                      size: 32,
+                                    )
+                                  : const WineGlassSvgGradient(
+                                      state: WineGlassState.empty,
+                                      size: 32,
+                                    ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Cata guiada final',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: _getTextColor(),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      pruebaFinalAprobada
+                                          ? 'Del análisis al disfrute'
+                                          : 'Antes tendrás que aprobar todo.',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: pruebaFinalAprobada
+                                            ? FontWeight.bold
+                                            : FontWeight.bold,
+                                        color: globalThemeNotifier.value
+                                            ? const Color.fromARGB(
+                                                255, 255, 255, 255)
+                                            : const Color.fromARGB(
+                                                255, 0, 0, 0),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              pruebaFinalAprobada
+                                  ? const WineGlassSvgGradient(
+                                      state: WineGlassState.full,
+                                      size: 32,
+                                    )
+                                  : const WineGlassSvgGradient(
+                                      state: WineGlassState.empty,
+                                      size: 32,
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -1105,9 +1125,10 @@ class _TemarioPageState extends State<TemarioPage>
       return 'Última Prueba';
     }
     if (title.contains(' - ')) {
-      return title.split(' - ')[1];
+      final full = title.split(' - ')[1];
+      return full.split('\n').first.trim();
     }
-    return title;
+    return title.split('\n').first.trim();
   }
 
   bool _isTemaUnlocked(int temaNumber) {
@@ -1484,8 +1505,8 @@ class _TemarioPageState extends State<TemarioPage>
     );
   }
 
- 
-  Route<T> _createSmoothRoute<T extends Object?>(Widget page) { // Función para crear transiciones suaves entre páginas
+  Route<T> _createSmoothRoute<T extends Object?>(Widget page) {
+    // Función para crear transiciones suaves entre páginas
     return PageRouteBuilder<T>(
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionDuration: const Duration(milliseconds: 600),

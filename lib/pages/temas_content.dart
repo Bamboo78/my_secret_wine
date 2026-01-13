@@ -1,15 +1,16 @@
 class FichaTema {
-  final String pregunta;
-  final String respuesta;
+  final String anverso;
+  final String reverso;
 
   FichaTema({
-    required this.pregunta,
-    required this.respuesta,
+    required this.anverso,
+    required this.reverso,
   });
 }
 
 class TemaContent {
-  final List<dynamic> contenido; // Puede contener String (texto) o FichaTema (foto, cata, tips)
+  final List<dynamic>
+      contenido; // Puede contener String (texto) o FichaTema (foto, cata, tips)
 
   TemaContent({
     required this.contenido,
@@ -20,7 +21,8 @@ class TemasData {
   static final Map<int, TemaContent> temas = {
     1: TemaContent(
       contenido: [
-        '''1. 🇫🇷Introducción: Del origen mítico al brindis moderno
+     
+        '''Introducción: Del origen mítico al brindis moderno
 
 Desde las antiguas civilizaciones hasta nuestros días, el vino ha sido mucho más que una simple bebida. Es un símbolo que ha trascendido épocas, culturas y creencias, ocupando un lugar privilegiado tanto en los banquetes de reyes como en la mesa cotidiana.
 
@@ -28,25 +30,23 @@ El vino ha representado placer, celebración, poder, espiritualidad y arte. Ha s
 
 La historia del vino no se mide solo en años, sino en transformación: de uvas silvestres fermentadas accidentalmente a complejos caldos creados con precisión científica. Su evolución es un reflejo de la evolución de la humanidad misma.
 ''',
-        
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidades que despiertan la pasión por el vino 
+     
+        '''Curiosidades que despiertan la pasión por el vino 
 
 •	Los egipcios y el vino: Ya en el año 3000 a.C., los antiguos egipcios producían vino tinto, que reservaban para las clases altas. Los jeroglíficos en tumbas muestran procesos de prensado, fermentación y almacenamiento. Lo usaban tanto en banquetes como en rituales religiosos, asociándolo con la vida eterna.
 •	El vino como regalo divino en Grecia: En la mitología griega, el vino era un regalo de Dionisio, el dios del vino, el éxtasis y la fertilidad. Las fiestas en su honor, las Dionisíacas, eran celebraciones de libertad sensorial y espiritual, donde el vino era el vínculo entre lo terrenal y lo divino.
 •	Los romanos y la democratización del vino: Los romanos perfeccionaron las técnicas de cultivo de la vid y almacenaje del vino. Lo llevaron a todos los rincones del Imperio, desde Hispania hasta la Galia, asegurando así su expansión por Europa. También fueron los primeros en escribir tratados sobre viticultura y en usar barricas para su conservación.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Air on the G String” de Johann Sebastian Bach.\n🍷 Vino sugerido: Un tinto joven (preferentemente Tempranillo o Garnacha). \n🍽 Maridaje recomendado: Pan artesanal y queso suave (Brie o Camembert joven).',
         ),
-
-        '''3. Enseñanza práctica: La evolución del vino en tres etapas clave
+     
+        '''Enseñanza práctica: La evolución del vino en tres etapas clave
 
 • Mesopotamia: El inicio del cultivo de la vid
 En torno al año 6000 a.C., en las zonas que hoy corresponden a Georgia, Armenia e Irán, ya se cultivaban uvas silvestres. Los pueblos mesopotámicos fueron pioneros en el cultivo controlado de la vid y probablemente los primeros en observar el proceso natural de fermentación. El vino, en esta etapa, era reservado para las élites y las ofrendas a los dioses.
@@ -58,23 +58,21 @@ Los romanos heredaron este amor por el vino y lo convirtieron en un símbolo de 
 • Edad Media: El vino y los monasterios como guardianes del saber
 Tras la caída del Imperio Romano, fueron los monasterios cristianos los que preservaron el conocimiento vinícola. Los monjes no solo elaboraban vino para uso litúrgico, sino que mejoraron técnicas de cultivo, selección de cepas y envejecimiento. En regiones como Borgoña y Champaña (Francia), los monasterios sentaron las bases de lo que hoy conocemos como enología moderna.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '¡La copa está servida, el viaje apenas comienza!',
         ),
-      
-      '''4. Conclusión: El vino, desde su misterioso origen en la antigüedad hasta el brindis actual, es más que una bebida: es un puente entre culturas, una expresión de la tierra y una forma de arte. Comprender su historia es comprender una parte esencial del desarrollo humano.
+     
+        '''El vino, desde su misterioso origen en la antigüedad hasta el brindis actual, es más que una bebida: es un puente entre culturas, una expresión de la tierra y una forma de arte. Comprender su historia es comprender una parte esencial del desarrollo humano.
 
-¿Listo para seguir explorando? ¡La copa está servida, el viaje apenas comienza!
+¿Listo para seguir explorando?
 ''',
-
       ],
     ),
-    
     2: TemaContent(
       contenido: [
-        '''1. Todo vino nace de una planta resistente, sabia y generosa: la vid.
+     
+        '''Todo vino nace de una planta resistente, sabia y generosa: la vid.
 
 La historia del vino no podría escribirse sin su protagonista principal: la vid (Vitis vinifera). Esta planta milenaria ha acompañado a la humanidad desde tiempos ancestrales, dando fruto a una de las bebidas más antiguas y culturalmente ricas de la historia: el vino.
 
@@ -87,13 +85,12 @@ La vid no es solo una planta agrícola. Es un símbolo de equilibrio entre el es
 
 Comprender la vid es el primer paso para entender el vino. La cepa, sus raíces, sus hojas, sus ciclos… todo en ella está conectado con el resultado final en la copa. Su comportamiento frente al clima, la composición del suelo y la mano del viticultor determinarán los aromas, la estructura y la personalidad del vino.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidades de la vid. Una sola vid puede vivir más de 100 años…
+     
+        '''Curiosidades de la vid. Una sola vid puede vivir más de 100 años…
 
 Así es. Aunque su producción máxima se da en los primeros 25 a 40 años, una vid puede vivir más de un siglo. Algunas cepas, especialmente en regiones tradicionales como Europa, aún producen uvas de calidad a los 80 o 90 años. A estas se las conoce como "viñas viejas", y suelen dar vinos más complejos y concentrados.
 
@@ -109,13 +106,12 @@ Una de sus cualidades más fascinantes es su plasticidad, es decir, su capacidad
 
 Cada cepa es una pequeña exploradora que traduce el mundo en sabor.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Acoustic Sunrise”\n🍷 Vino sugerido: Blanco seco, servido a 9 °C (Sauvignon Blanc o Verdejo)\n🍽 Maridaje sugerido: Mariscos  y ensaladas frescas con frutas, nueces o queso suave.',
         ),
-
-        '''3. Enseñanza práctica. Factores que dan identidad al vino
+     
+        '''Enseñanza práctica. Factores que dan identidad al vino
 
 Para que un vino tenga carácter, tres factores deben alinearse: clima, suelo y variedad.
 
@@ -147,23 +143,20 @@ Cada variedad de uva (o cepa) tiene un perfil único:
 
 La elección de la variedad debe ser adecuada al entorno. De lo contrario, el vino puede perder armonía.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '"Cada racimo es un pequeño milagro que el suelo susurra y el sol escribe.”',
         ),
-      
-      '''4. Conclusión: "Cada racimo es un pequeño milagro que el suelo susurra y el sol escribe.”
-      
-      Esta frase resume la magia del vino: la unión de naturaleza, tiempo y cuidado humano. Comprender la vid es comprender ese delicado equilibrio entre lo visible y lo invisible, lo técnico y lo emocional. Cada botella que llega a nuestras manos es el resultado de años de trabajo, de escucha atenta a la tierra y de respeto por una planta tan sabia como generosa.
+     
+        '''Esta frase resume la magia del vino: la unión de naturaleza, tiempo y cuidado humano. Comprender la vid es comprender ese delicado equilibrio entre lo visible y lo invisible, lo técnico y lo emocional. Cada botella que llega a nuestras manos es el resultado de años de trabajo, de escucha atenta a la tierra y de respeto por una planta tan sabia como generosa.
 ''',
-
       ],
     ),
-
     3: TemaContent(
       contenido: [
-        '''1. Introducción: Del campo a la copa
+     
+        '''
+Introducción: Del campo a la copa
 
 El vino es el resultado de un proceso donde la naturaleza y el ser humano se entrelazan en perfecta armonía. Desde la elección de la uva hasta el momento en que el líquido descansa en la copa, cada fase influye en su carácter final.Podemos decir que el vino es una obra de arte líquida, moldeada por decisiones técnicas, intuiciones sensoriales y la paciencia del tiempo.
 
@@ -171,13 +164,12 @@ Todo comienza en el viñedo, el corazón de la calidad. Allí, el viticultor cui
 
 El objetivo final es simple pero sublime: preservar la esencia de la uva y potenciar su expresión a través de un proceso controlado que mantenga su pureza, aroma y equilibrio.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: La magia de la fermentación
+     
+        '''Curiosidad: La magia de la fermentación
 
 La fermentación es el corazón del proceso vinícola. En esta etapa ocurre la transformación del mosto (zumo de uva) en vino gracias a la acción de las levaduras naturales o seleccionadas.Estas levaduras, microorganismos invisibles pero poderosos, se alimentan del azúcar presente en la uva y lo transforman en alcohol y dióxido de carbono. Este fenómeno es pura alquimia biológica.
 
@@ -185,13 +177,12 @@ Durante la fermentación, se liberan también compuestos aromáticos que dan for
 
 Dato curioso: En muchas bodegas tradicionales, aún se usa la fermentación espontánea, confiando en las levaduras autóctonas del viñedo. Esto da lugar a vinos con una identidad más local y auténtica, reflejo directo del terroir.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Cello Suite No. 1 in G Major” – J.S. Bach\n🍷 Vino sugerido: Tinto crianza servido a 17 °C.\n🍽 Maridaje: Carnes blancas, aves o pastas con salsa ligera.',
         ),
-
-        '''3. Enseñanza práctica: Las etapas principales
+     
+        '''Enseñanza práctica: Las etapas principales
 
 El proceso de elaboración del vino se puede dividir en cuatro grandes etapas. Cada una requiere precisión, experiencia y una profunda comprensión del equilibrio entre naturaleza y técnica.
 
@@ -242,23 +233,19 @@ La crianza no solo transforma el vino: lo educa.Durante su estancia en la barric
 4. Embotellado
 La última etapa, pero no menos importante.Antes de ser embotellado, el vino se filtra, estabiliza y clarifica, eliminando impurezas.Una vez en la botella, sigue evolucionando lentamente, desarrollando aromas terciarios (cuero, trufa, miel, tabaco) y ganando elegancia con el tiempo.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El vino nace de la tierra, pero se cría en el tiempo.”',
         ),
-      
-      '''4. Conclusión: “El vino nace de la tierra, pero se cría en el tiempo.”
-
-El proceso de elaboración del vino es una danza entre ciencia y poesía.Cada decisión —cuándo vendimiar, cómo fermentar, cuánto criar— deja una huella indeleble en el alma del vino.Comprender este viaje permite a los futuros sommeliers no solo servir un vino, sino interpretarlo y transmitir su historia.Porque en cada botella hay un fragmento de tierra, un soplo de tiempo y la huella de las manos que lo crearon.
+     
+        '''El proceso de elaboración del vino es una danza entre ciencia y poesía.Cada decisión —cuándo vendimiar, cómo fermentar, cuánto criar— deja una huella indeleble en el alma del vino.Comprender este viaje permite a los futuros sommeliers no solo servir un vino, sino interpretarlo y transmitir su historia.Porque en cada botella hay un fragmento de tierra, un soplo de tiempo y la huella de las manos que lo crearon.
 ''',
-
       ],
     ),
-
     4: TemaContent(
       contenido: [
-        '''1. Introducción: Los tintos, alma y fuerza del vino
+     
+        '''Introducción: Los tintos, alma y fuerza del vino
 
 El vino tinto es, sin duda, la columna vertebral del mundo del vino. Representa intensidad, estructura, complejidad y, sobre todo, carácter.Su color profundo, sus taninos firmes y su riqueza aromática lo convierten en una experiencia que trasciende el simple gusto: es una conversación entre la tierra, el tiempo y el paladar.
 
@@ -268,13 +255,12 @@ Un buen somelier debe comprender que el vino tinto es el puente entre la potenci
 
 El aprendizaje fundamental es entender que, detrás de cada vino tinto, hay una historia de equilibrio entre naturaleza y arte.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. El color del vino tinto proviene de la piel de la uva, no del jugo
+     
+        '''El color del vino tinto proviene de la piel de la uva, no del jugo
 
 Esta es una de las curiosidades más reveladoras para los futuros someliers.El zumo de la mayoría de las uvas, incluso las tintas, es incoloro o ligeramente dorado.El color del vino tinto proviene de los pigmentos naturales llamados antocianos, que se encuentran en la piel de la uva.
 
@@ -282,13 +268,12 @@ Durante la fermentación alcohólica, el mosto permanece en contacto con las pie
 
 Dato técnico:En variedades como Cabernet Sauvignon o Syrah, los pigmentos son intensos y estables, mientras que en Pinot Noir o Garnacha tienden a oxidarse antes, dando tonos más claros.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: Miles Davis – “Blue in Green”\n🍷 Vino sugerido: Cabernet Sauvignon Reserva\n🍽 Maridaje: Entrecot a la parrilla o tabla de quesos curados.',
         ),
-
-        '''3. Enseñanza práctica
+     
+        '''Enseñanza práctica
 
 El servicio correcto del vino tinto es esencial para apreciar su riqueza. Cada detalle —temperatura, copa, aireación y maridaje— influye directamente en la experiencia sensorial.
 
@@ -461,22 +446,19 @@ Perfil aromático:
 Maridaje ideal:
 •	Ideal para pescados azules a la parrilla, carnes blancas, arroces de montaña, setas o pulpo a la brasa.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El vino tinto no se bebe… se conversa.”',
         ),
-      
-      '''4. Conclusión: “El vino tinto no se bebe… se conversa.”
-
-Cada vino tinto es una voz distinta en el coro de la tierra.Al aprender a escucharlo, el futuro sommelier se convierte en intérprete del paisaje, del clima y de la mano del hombre.Su cuerpo refleja la madurez del fruto; su carácter, la intención del enólogo; su alma, el paso del tiempo.
+     
+        '''Cada vino tinto es una voz distinta en el coro de la tierra.Al aprender a escucharlo, el futuro sommelier se convierte en intérprete del paisaje, del clima y de la mano del hombre.Su cuerpo refleja la madurez del fruto; su carácter, la intención del enólogo; su alma, el paso del tiempo.
 ''',
       ],
     ),
-
     5: TemaContent(
       contenido: [
-        '''1. Introducción: Refrescantes, luminosos y ligeros
+     
+        '''Introducción: Refrescantes, luminosos y ligeros
 
 El vino blanco es sinónimo de luz, frescura y equilibrio.Representa la cara más delicada del mundo del vino: aromas vibrantes, texturas suaves y una acidez que despierta el paladar.A diferencia de los tintos, los vinos blancos no buscan fuerza o taninos, sino pureza, frescor y expresión aromática.
 
@@ -486,13 +468,12 @@ El vino blanco enseña al somelier la importancia del detalle y la temperatura, 
  
 Lección esencial: el vino blanco no es “más simple” que el tinto; es simplemente más honesto con el clima, el tiempo y el momento.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Algunos blancos envejecen en barrica, logrando aromas a vainilla y miel
+     
+        '''Curiosidad: Algunos blancos envejecen en barrica, logrando aromas a vainilla y miel
 
 Aunque la mayoría de los vinos blancos se disfrutan jóvenes, existen estilos que pasan por madera, igual que los tintos.En estos casos, el vino gana textura, complejidad y notas aromáticas terciarias.
 •	En barricas de roble francés, el vino adquiere toques de vainilla, miel, mantequilla, pan tostado o frutos secos.
@@ -502,13 +483,12 @@ Este tipo de envejecimiento requiere uvas con buena estructura y acidez, como el
 
 Dato técnico: en muchos vinos blancos con crianza, la fermentación y el reposo en barrica se acompañan del “batonnage”, técnica que remueve las lías finas para dar más untuosidad y volumen en boca.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: Bossa Nova – “The Girl from Ipanema”\n🍷 Vino sugerido: Sauvignon Blanc joven.\n🍽 Maridaje: Ceviche o camarones al ajillo.',
         ),
-
-        '''3. Enseñanza práctica
+     
+        '''Enseñanza práctica
 
 Temperatura de servicio
 
@@ -613,22 +593,19 @@ El Airén enseña humildad: no todos los vinos buscan complejidad, algunos simpl
 
 Chardonnay aporta cuerpo; Sauvignon Blanc, frescura; Albariño, salinidad; Verdejo, equilibrio; Godello, elegancia; y Airén, sencillez.Estas seis variedades enseñan al alumno que el vino blanco es mucho más diverso de lo que parece.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Un buen blanco es como el verano: ligero, brillante y fugaz.”',
         ),
-      
-      '''4. Conclusión: “Un buen blanco es como el verano: ligero, brillante y fugaz.”
-
-El vino blanco nos enseña a valorar la sencillez bien lograda, la pureza de la fruta y la precisión del clima.Mientras el vino tinto conversa con la tierra, el blanco lo hace con el aire y la luz.Su frescura no es debilidad, sino una forma distinta de elegancia.
+     
+        '''El vino blanco nos enseña a valorar la sencillez bien lograda, la pureza de la fruta y la precisión del clima.Mientras el vino tinto conversa con la tierra, el blanco lo hace con el aire y la luz.Su frescura no es debilidad, sino una forma distinta de elegancia.
 ''',
       ],
     ),
-    
     6: TemaContent(
       contenido: [
-        '''1. Introducción: El punto medio entre la intensidad del tinto y la frescura del blanco
+     
+        '''Introducción: El punto medio entre la intensidad del tinto y la frescura del blanco
 
 El vino rosado es el equilibrio hecho líquido.Combina la estructura ligera de un tinto con la frescura y vivacidad de un blanco, creando una experiencia versátil, elegante y moderna.
 
@@ -638,13 +615,12 @@ El color rosado no es solo una cuestión estética; es una declaración de estil
 
 El rosado enseña el arte del equilibrio: la delicadeza de un blanco con el alma de un tinto.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Su color rosado se logra dejando la piel de la uva en contacto con el jugo solo unas horas
+     
+        '''Curiosidad: Su color rosado se logra dejando la piel de la uva en contacto con el jugo solo unas horas
 
 El secreto del color del vino rosado está en la maceración breve de los hollejos (pieles) con el mosto.Mientras que los vinos tintos fermentan durante días con la piel, el rosado sólo la mantiene en contacto durante 2 a 24 horas, dependiendo de la intensidad de color deseada.
 
@@ -657,13 +633,12 @@ Existen tres métodos principales de elaboración:
 
 Dato técnico: los vinos rosados, al igual que los blancos, deben conservar su frescura. Por ello, suelen elaborarse en depósitos de acero inoxidable y embotellarse jóvenes.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: Norah Jones – “Come Away With Me”\n🍷 Vino sugerido: Rosado de Garnacha joven.\n🍽 Maridaje: Ensalada mediterránea o pizza blanca.',
         ),
-
-        '''3. Enseñanza práctica
+     
+        '''Enseñanza práctica
 
 Temperatura de servicio
 
@@ -720,23 +695,19 @@ La Pinot Noir, reina de Borgoña y Champagne, produce algunos de los rosados má
 
 El rosado de Pinot Noir enseña que la elegancia no necesita intensidad, solo armonía.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El rosado no elige bandos: conquista a todos los paladares.”',
         ),
-      
-      '''4. Conclusión: “El rosado no elige bandos: conquista a todos los paladares.”
-
-El vino rosado es el vino del equilibrio y la alegría.Aúna la fruta del tinto con la ligereza del blanco, creando un punto de encuentro entre ambos mundos.Su versatilidad lo hace imprescindible en la formación de todo sommelier: enseña color, tiempo, temperatura y armonía.
+     
+        '''El vino rosado es el vino del equilibrio y la alegría.Aúna la fruta del tinto con la ligereza del blanco, creando un punto de encuentro entre ambos mundos.Su versatilidad lo hace imprescindible en la formación de todo sommelier: enseña color, tiempo, temperatura y armonía.
 ''',
-
       ],
     ),
-    
     7: TemaContent(
       contenido: [
-        '''1. Introducción: Cada burbuja es una pequeña fiesta
+     
+        '''Introducción: Cada burbuja es una pequeña fiesta
 
 Pocas cosas despiertan tanta emoción como el sonido de un corcho al salir o el brillo de un vino espumoso en la copa.El vino espumoso representa celebración, elegancia y alegría, pero también técnica, precisión y arte enológico.
 
@@ -748,13 +719,12 @@ Los espumosos pueden ser desde ligeros y frutales, hasta complejos y tostados, d
 
 El vino espumoso no solo se bebe: se escucha, se observa y se siente.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Dom Perignon no inventó el champagne… ¡pero ayudó a perfeccionarlo!
+     
+        '''Curiosidad: Dom Perignon no inventó el champagne… ¡pero ayudó a perfeccionarlo!
 
 Durante siglos, el fenómeno de las burbujas fue un misterio.En el siglo XVII, los vinos de la región de Champagne (Francia) sufrían fermentaciones espontáneas en primavera, lo que hacía que algunos corchos saltaran por la presión.
 
@@ -764,13 +734,12 @@ Gracias a su trabajo y al desarrollo del método tradicional (o champenoise), el
 
 Fun fact: una botella de champagne puede contener hasta 49 millones de burbujas.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Classical Remix – Vivaldi Lounge”\n🍷 Vino sugerido: Cava Brut Nature\n🍽 Maridaje: Ostras o tartar de salmón.',
         ),
-
-        '''3. Enseñanza práctica. Tipos principales de vinos espumosos
+     
+        '''Enseñanza práctica. Tipos principales de vinos espumosos
 
 1.	Champagne (Francia)El más prestigioso y complejo. Se elabora en la región de Champagne mediante el método tradicional, con segunda fermentación en botella y un largo envejecimiento sobre lías.
 •	Variedades: Chardonnay, Pinot Noir, Pinot Meunier.
@@ -816,23 +785,20 @@ Maridajes recomendados:
 
 Un buen espumoso es el compañero perfecto para toda una comida, no solo para brindar.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Cada burbuja es un aplauso pequeño que celebra la vida.”',
         ),
-      
-      '''4. Conclusión: “Cada burbuja es un aplauso pequeño que celebra la vida.”
-
-El vino espumoso es la unión perfecta entre ciencia y arte.Sus burbujas nacen del control minucioso de una segunda fermentación, pero el resultado final es pura emoción.
+     
+        '''El vino espumoso es la unión perfecta entre ciencia y arte.Sus burbujas nacen del control minucioso de una segunda fermentación, pero el resultado final es pura emoción.
 Desde el Cava español —orgullo de nuestra tierra— hasta el Champagne francés o el Prosecco italiano, todos comparten una misma esencia: alegrar los sentidos y elevar los momentos.
 ''',
       ],
     ),
-    
     8: TemaContent(
       contenido: [
-        '''1. Introducción: El broche de oro de la mesa
+     
+        '''Introducción: El broche de oro de la mesa
 
 Los vinos dulces y generosos representan el arte del tiempo, la paciencia y la concentración del sabor.Son el último acto de una gran comida, el punto de equilibrio entre placer, aroma y dulzura.
 
@@ -847,13 +813,12 @@ Los vinos dulces son historia líquida: muchos de ellos fueron símbolo de noble
 
 En el universo del vino, los dulces y generosos son los guardianes del tiempo y la memoria.
 ''',
-
         FichaTema(
-          pregunta: '¿Cuántas variedades de uva existen?',
-          respuesta: 'Más de 10,000 variedades, pero solo unas pocas decenas se cultivan para producir vinos de calidad.',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
 
-        '''2. Curiosidad: El sistema de criaderas y soleras
+        '''Curiosidad: El sistema de criaderas y soleras
 
 En Jerez de la Frontera, cuna de los vinos generosos españoles, se utiliza un sistema de envejecimiento único en el mundo: las criaderas y soleras.
 
@@ -865,13 +830,12 @@ Cuando se saca una parte del vino de la solera, se repone con vino de la criader
 
 El vino de Jerez no envejece por años… envejece por generaciones.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: Paco de Lucía – “Entre Dos Aguas”\n🍷 Vino sugerido: Pedro Ximénez (PX)\n🍽 Maridaje: Brownie o queso azul.',
         ),
-
-        '''3. Enseñanza práctica
+       
+        '''Enseñanza práctica
 
 Tipos principales de vinos dulces y generosos
 
@@ -936,22 +900,19 @@ El secreto del maridaje con vinos dulces es el contraste o la armonía de intens
 
 Regla de oro: el vino debe ser siempre más dulce que el postre.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Los vinos dulces son el postre de los dioses… y el secreto de los mortales felices.”',
         ),
-      
-      '''4. Conclusión: “Los vinos dulces son el postre de los dioses… y el secreto de los mortales felices.”
-
-Los vinos dulces y generosos son mucho más que un final de comida: son una experiencia emocional.Hablan de paciencia, de tradición y de placer contenido.Cada sorbo es una historia: del sol que secó las uvas, del tonel que las guardó y del tiempo que las transformó.
+       
+        '''Los vinos dulces y generosos son mucho más que un final de comida: son una experiencia emocional.Hablan de paciencia, de tradición y de placer contenido.Cada sorbo es una historia: del sol que secó las uvas, del tonel que las guardó y del tiempo que las transformó.
 ''',
       ],
     ),
-    
     9: TemaContent(
       contenido: [
-        '''1. Introducción: Catar no es beber, es descubrir
+       
+        '''Introducción: Catar no es beber, es descubrir
 
 Catar un vino no consiste en beberlo, sino en analizarlo con los sentidos para comprender su origen, su estilo y su calidad.Cada vino encierra una historia: la del clima que lo vio nacer, el suelo donde creció la vid, la mano del viticultor y las decisiones del enólogo.El catador, con atención y sensibilidad, traduce esa historia en sensaciones.
 
@@ -966,13 +927,12 @@ El buen catador desarrolla con el tiempo una memoria sensorial, capaz de asociar
 
 Catar es aprender a mirar, oler y saborear con intención.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: El secreto de los profesionales
+       
+        '''Curiosidad: El secreto de los profesionales
 
 Una de las curiosidades más llamativas del mundo de la cata es que los catadores profesionales no tragan el vino durante las pruebas.Lo prueban, analizan su textura y sabor, y luego lo escupen en un recipiente especial llamado escupidera.
 
@@ -982,13 +942,12 @@ Escupir no es una falta de respeto: es un gesto profesional, símbolo de respeto
 
 El catador sabio conserva la mente lúcida y el paladar despierto.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Clair de Lune” – Claude Debussy\n🍷 Vino sugerido: Tinto joven o blanco afrutado\n🍽 Maridaje: Frutos secos o pan artesanal neutro.',
         ),
-
-        '''3. Enseñanza práctica: Los tres pasos esenciales
+       
+        '''Enseñanza práctica: Los tres pasos esenciales
 
 Catar un vino es una exploración guiada por tres fases: vista, olfato y gusto.Cada una revela una parte distinta de su identidad.Siguiendo este método, podrás analizar cualquier vino con precisión y elegancia.
 
@@ -1103,22 +1062,19 @@ Rutina de práctica semanal (para avanzar rápido)
 
 No necesitas nacer con “buen paladar” para aprender: solo atención, curiosidad y práctica.Cada copa es una lección: mira, huele, pregunta, anota y repite. Con el tiempo, reconocerás uvas, estilos y regiones —y lo harás con confianza.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Catar es escuchar lo que el vino tiene que decir, sin interrumpirlo.”',
         ),
       
-      '''4. Conclusión: “Catar es escuchar lo que el vino tiene que decir, sin interrumpirlo.”
-
-La cata es un viaje interior, una conversación entre el vino y quien lo prueba.Con práctica, paciencia y curiosidad, el catador aprende a reconocer matices que pasan inadvertidos a los demás.Catar no es cuestión de tener un paladar extraordinario, sino de educar la atención y memorizar sensaciones.
+        '''La cata es un viaje interior, una conversación entre el vino y quien lo prueba.Con práctica, paciencia y curiosidad, el catador aprende a reconocer matices que pasan inadvertidos a los demás.Catar no es cuestión de tener un paladar extraordinario, sino de educar la atención y memorizar sensaciones.
 ''',
       ],
     ),
-    
     10: TemaContent(
       contenido: [
-        '''1. Introducción: El poder de un grado
+      
+        '''Introducción: El poder de un grado
 
 La temperatura del vino es tan importante como la uva, la crianza o la guarda.Un solo grado de diferencia puede alterar completamente aromas, sabores, cuerpo y percepción del alcohol.
 •	Vino demasiado frío: aromas apagados, sensación de falta de cuerpo, acidez excesiva.
@@ -1126,13 +1082,12 @@ La temperatura del vino es tan importante como la uva, la crianza o la guarda.Un
 
 Servir un vino a la temperatura adecuada resalta su expresión auténtica, tanto si es un blanco fresco de verano como un tinto de guarda con cuerpo.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: el impacto sensorial
+      
+        '''Curiosidad: el impacto sensorial
 
 •	Los blancos demasiado fríos (menos de 6–7°C) pierden intensidad aromática y se sienten planos.
 •	Los tintos demasiado cálidos (más de 20°C) parecen alcohólicos y pesados; los taninos se vuelven ásperos.
@@ -1141,13 +1096,12 @@ Servir un vino a la temperatura adecuada resalta su expresión auténtica, tanto
  
 La temperatura controla la velocidad de volatilización de los compuestos aromáticos, la percepción de acidez y la sensación de alcohol en boca.
  ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Cold Little Heart” – Michael Kiwanuka\n🍷 Vino sugerido: prueba el mismo vino a dos temperaturas distintas (por ejemplo, Chardonnay joven a 8 °C-12 °C).\n🍽 Maridaje sugerido: Queso curado para tintos cálidos y fruta fresca o ceviche para blancos fríos.',
         ),
-
-        '''3. Enseñanza práctica: Guía básica por estilos
+      
+        '''Enseñanza práctica: Guía básica por estilos
 
 Para facilitar la práctica y la recomendación profesional, aquí tienes una tabla orientativa de temperaturas ideales según el tipo de vino:
 
@@ -1185,24 +1139,21 @@ Consejos prácticos
 2.	Sacar un blanco o rosado de la nevera 10 minutos antes de servir permite que abra sus aromas.
 3.	Los vinos espumosos deben estar bien fríos para que la efervescencia y frescor se mantengan.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Un vino fuera de temperatura es como una canción desafinada.”',
         ),
       
-      '''4. Conclusión: “Un vino fuera de temperatura es como una canción desafinada.”
-
-La temperatura no es un detalle menor: es el control del escenario donde el vino actúa.
+        '''La temperatura no es un detalle menor: es el control del escenario donde el vino actúa.
 1.	Sirviendo correctamente, potenciamos aromas, sabor y textura.
 2.	Sirviendo mal, podemos apagar un vino excelente o hacer que uno mediocre parezca desequilibrado.
 ''',
       ],
     ),
-    
     11: TemaContent(
       contenido: [
-        '''1. Introducción: La magia de la forma
+      
+        '''Introducción: La magia de la forma
 
 La copa no es solo un recipiente: es una extensión del vino, capaz de modificar aromas, sabores, temperatura y percepción del momento.
 •	Una copa adecuada dirige el vino hacia la zona correcta de la lengua, realza sus notas aromáticas y concentra su bouquet.
@@ -1211,13 +1162,12 @@ La copa no es solo un recipiente: es una extensión del vino, capaz de modificar
  
 Elegir la copa correcta es como elegir la varita de un mago: cambia la experiencia por completo.
  ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: el borde marca el sabor
+      
+        '''Curiosidad: el borde marca el sabor
 
 El borde de la copa determina dónde entra el vino en la boca y qué receptores perciben primero:
 •	Borde ancho: el vino golpea más lengua, sensación más redonda y estructurada.
@@ -1225,13 +1175,12 @@ El borde de la copa determina dónde entra el vino en la boca y qué receptores 
 
 Esto significa que un mismo vino puede sentirse distinto según la copa que uses. Por ejemplo: un Chardonnay joven en copa ancha puede parecer más redondo; en copa estrecha, más fresco y cítrico.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Experience – Ludovico Einaudi”\n🍷 Actividad: prueba el mismo vino en dos copas distintas (ej. Chardonnay en copa ancha vs. estrecha).\n🍽 Maridaje sugerido: chocolate negro o frutos secos. Esto ayuda a percibir cómo la copa afecta la integración del sabor con la comida.',
         ),
-
-        '''3. Enseñanza práctica: Copas por tipo de vino
+      
+        '''Enseñanza práctica: Copas por tipo de vino
 
 1. Tintos – copa grande tipo Bordeaux
 •	Amplio cáliz que permite oxigenación.
@@ -1260,24 +1209,21 @@ Esto significa que un mismo vino puede sentirse distinto según la copa que uses
 •	Evita que el dulzor domine la percepción.
 •	Temperatura: 10–14°C.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“La copa correcta convierte un buen vino en una experiencia memorable.”',
         ),
       
-      '''4. Conclusión: “La copa correcta convierte un buen vino en una experiencia memorable.”
-
-•	Elegir la copa adecuada maximiza aromas y sabores, controla la temperatura y mejora la percepción del vino.
+        '''•	Elegir la copa adecuada maximiza aromas y sabores, controla la temperatura y mejora la percepción del vino.
 •	Sirviendo en la copa correcta, incluso un vino sencillo se percibe más equilibrado y placentero.
 •	Los profesionales siempre tienen varias copas a mano y ajustan según tipo de vino, ocasión y estilo de servicio.
 ''',
       ],
     ),
-    
     12: TemaContent(
       contenido: [
-        '''1. Introducción: Cultura líquida
+      
+        '''Introducción: Cultura líquida
 
 El vino no solo se bebe; inspira y crea. Pintores, escultores, escritores y músicos han capturado su esencia, desde lo cotidiano hasta lo divino.
 •	Más que bebida, el vino es símbolo de identidad cultural, unión social y expresión artística.
@@ -1285,13 +1231,12 @@ El vino no solo se bebe; inspira y crea. Pintores, escultores, escritores y mús
 •	Observar la historia del vino en el arte nos ayuda a comprender mejor su valor cultural y emocional.
 
 El vino es un hilo invisible que une paladar y creatividad.''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Dionisio, el primer influencer del vino
+      
+        '''Curiosidad: Dionisio, el primer influencer del vino
 
 •	En la Antigua Grecia, Dionisio era el dios del vino, la fertilidad y la fiesta.
 •	Aparece en esculturas, cerámicas y frescos rodeado de copas, uvas, músicos y danzantes.
@@ -1299,13 +1244,12 @@ El vino es un hilo invisible que une paladar y creatividad.''',
 •	El arte clásico retrata el vino como medio de unión y ritual, donde beber era compartir y celebrar.
 
 Dionisio muestra cómo el vino siempre ha sido mucho más que una bebida: es un vehículo de cultura y emoción.''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “La Primavera” – Vivaldi\n🍷 Vino sugerido: blanco fresco, ligero y aromático (Albariño o Sauvignon Blanc joven).\n🍽 Maridaje: uvas frescas, quesos suaves, frutos secos delicados.',
         ),
-
-        '''3. Enseñanza práctica: El vino a través del tiempo
+      
+        '''Enseñanza práctica: El vino a través del tiempo
 
 1. Arte clásico
 •	Pinturas, frescos y esculturas de Grecia y Roma.
@@ -1328,22 +1272,20 @@ Dionisio muestra cómo el vino siempre ha sido mucho más que una bebida: es un 
 Cada época revela cómo cambian los valores sociales y emocionales del vino.
 ''',
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El arte pinta lo que el vino hace sentir.”',
         ),
       
-      '''4. Conclusión:“El arte pinta lo que el vino hace sentir.”
-
-•	Observar cómo aparece el vino en la historia del arte nos ayuda a comprender su dimensión cultural y emocional.
+        '''•	Observar cómo aparece el vino en la historia del arte nos ayuda a comprender su dimensión cultural y emocional.
 •	El vino es inspiración líquida: conecta personas, sentidos y creatividad.
 •	Disfrutar un vino con conciencia histórica y sensorial es aprender a beber cultura.
 ''',
       ],
     ),
-    
     13: TemaContent(
       contenido: [
-        '''1. Introducción: El dúo perfecto
+      
+        '''Introducción: El dúo perfecto
 
 El maridaje es el arte de combinar un vino con un alimento de manera que ambos se realcen, como un dúo musical donde cada instrumento brilla sin opacar al otro.
 •	El vino y la comida se influyen mutuamente: la acidez, taninos, dulzor o cuerpo del vino interactúan con la grasa, sal y textura de los alimentos.
@@ -1351,13 +1293,12 @@ El maridaje es el arte de combinar un vino con un alimento de manera que ambos s
 
 Maridar bien no es una regla rígida: es entender cómo cada sabor interactúa y se armoniza.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Historia del maridaje
+      
+        '''Curiosidad: Historia del maridaje
 
 •	El primer maridaje registrado data de hace más de 2.000 años: vino con queso.
 •	En culturas mediterráneas, vino y pan o vino y carne eran combinaciones naturales, nacidas de la disponibilidad y armonía de sabores.
@@ -1365,13 +1306,12 @@ Maridar bien no es una regla rígida: es entender cómo cada sabor interactúa y
 
 El vino ha acompañado la historia del hombre, convirtiéndose en un compañero de comida, celebración y arte.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Come Away With Me” – Norah Jones\n🍷 Reto: elige tu vino favorito y combínalo con 3 alimentos distintos.\n🍽 Ejemplo: Chardonnay joven con sushi, Cabernet Sauvignon con chocolate negro,  o Garnacha rosada con ensalada.',
         ),
-
-        '''3. Enseñanza práctica: Reglas básicas para acertar
+      
+        '''Enseñanza práctica: Reglas básicas para acertar
 
 1. Blancos
 •	Aromas frescos y acidez ligera combinan perfectamente con pescado, sushi, mariscos y ensaladas.
@@ -1396,24 +1336,21 @@ Consejos prácticos
 
 El maridaje no es solo ciencia, también es sensibilidad y experimentación.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Un buen maridaje no se explica… se saborea.”',
         ),
       
-      '''4. Conclusión: “Un buen maridaje no se explica… se saborea.”
-
-•	Maridar es jugar con sabores, texturas y aromas para crear armonía.
+        '''•	Maridar es jugar con sabores, texturas y aromas para crear armonía.
 •	Cada combinación ofrece una experiencia única y personal, donde el vino y la comida se realzan mutuamente.
 •	La práctica constante, la curiosidad y la sensibilidad son clave para dominar el arte del maridaje.
 ''',
       ],
     ),
-    
     14: TemaContent(
       contenido: [
-        '''1. Introducción: La música transforma la experiencia
+      
+        '''Introducción: La música transforma la experiencia
 
 La forma en que percibimos un vino no depende solo de su aroma o sabor: la música puede alterar su percepción, afectando cómo valoramos cuerpo, acidez y dulzor.
 •	Estudios científicos muestran que los estímulos auditivos influyen en los sentidos del gusto y olfato.
@@ -1422,13 +1359,12 @@ La forma en que percibimos un vino no depende solo de su aroma o sabor: la músi
 
 Vino y música no solo se disfrutan, se sienten juntos.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: ciencia y percepción
+      
+        '''Curiosidad: ciencia y percepción
 
 •	Experimento: participantes cataban vinos mientras escuchaban música clásica, rock o silencio.
 •	Resultado: la música clásica resaltaba notas elegantes y complejas, mientras que música intensa o rápida podía hacer que los vinos parecieran más agresivos o frutales.
@@ -1436,13 +1372,12 @@ Vino y música no solo se disfrutan, se sienten juntos.
  
 El cerebro integra estímulos sensoriales: el oído modifica la experiencia gustativa.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Playlist sugerida: “Wine & Chill Sessions”\n🍷 Actividad: elige un vino (por ejemplo, un Pinot Noir) y pruébalo con dos géneros musicales distintos: jazz y rock.\n🍽 Maridaje opcional: frutos secos o quesos suaves para no interferir con la percepción de los aromas y texturas.',
         ),
-
-        '''3. Enseñanza práctica: Guía de armonías
+      
+        '''Enseñanza práctica: Guía de armonías
 
 1. Jazz suave
 •	Vinos sugeridos: Chardonnay, Pinot Noir.
@@ -1464,24 +1399,21 @@ El cerebro integra estímulos sensoriales: el oído modifica la experiencia gust
 •	Vinos sugeridos: Espumosos (Cava, Champagne, Prosecco).
 •	Por qué: ritmo y burbujas se complementan, creando sensaciones dinámicas y festivas.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El vino entra por la boca… pero la música lo hace bailar.”',
         ),
       
-      '''4. Conclusión: “El vino entra por la boca… pero la música lo hace bailar.”
-
-•	La armonía entre vino y música es una herramienta para mejorar la experiencia multisensorial.
+        '''•	La armonía entre vino y música es una herramienta para mejorar la experiencia multisensorial.
 •	Conocer estas combinaciones permite potenciar emociones, aromas y sensaciones, haciendo de cada cata un evento único.
 •	Practicar con diferentes géneros y estilos de vino desarrolla sensibilidad, creatividad y disfrute consciente.
 ''',
       ],
     ),
-    
     15: TemaContent(
       contenido: [
-        '''1. Introducción: Viajar a través del vino
+      
+        '''Introducción: Viajar a través del vino
 
 Recorrer rutas del vino es viajar con todos los sentidos: conocer sabores, aromas, paisajes, culturas y tradiciones en cada región vitivinícola.
 •	Cada región tiene variedades autóctonas, métodos de cultivo y técnicas de elaboración únicas.
@@ -1489,26 +1421,24 @@ Recorrer rutas del vino es viajar con todos los sentidos: conocer sabores, aroma
 •	Viajar con la copa en la mano permite experimentar la relación entre el entorno, el clima y el vino.
 
 El vino es un pasaporte para descubrir el mundo.''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad:  Rutas del vino oficiales
+      
+        '''Curiosidad:  Rutas del vino oficiales
 
 •	Existen más de 70 rutas del vino reconocidas oficialmente en todo el mundo.
 •	Cada ruta ofrece visitas a bodegas, catas guiadas, museos del vino y experiencias gastronómicas.
 •	Las rutas no solo muestran el vino: enseñan paisajes, historia y cultura local, convirtiendo la cata en una experiencia inmersiva.
 
 Viajar por el vino es como leer un libro de historia con aroma y sabor.''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Volare” – Gipsy Kings\n🍷 Actividad: elige un vino típico de la región que más te atraiga (ej. Malbec de Mendoza, Albariño de Galicia, Chianti de Toscana).\n🍽 Maridaje sugerido: platos típicos de la región seleccionada para experimentar la armonía completa.',
         ),
-
-        '''3. Enseñanza práctica: Destinos imperdibles
+      
+        '''Enseñanza práctica: Destinos imperdibles
 
 Tip del sumiller viajero: Cada región refleja terroir, clima y cultura local, aprendiendo esto se entiende por qué el mismo tipo de uva tiene perfiles distintos según su origen.
 
@@ -1582,24 +1512,21 @@ Tip del sumiller viajero: Cada región refleja terroir, clima y cultura local, a
 •	Paisaje: terrazas de viñedos en el río Duero, pueblos tradicionales.
 •	Experiencia: visitas a bodegas de oporto y catas verticales de añadas históricas.
  ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Quien viaja y bebe vino, vive dos veces.”',
         ),
       
-      '''4. Conclusión: “Quien viaja y bebe vino, vive dos veces.”
-
-•	Explorar rutas del vino es una experiencia educativa, cultural y sensorial completa.
+        '''•	Explorar rutas del vino es una experiencia educativa, cultural y sensorial completa.
 •	Aprender sobre variedades, terroir y gastronomía en su contexto real amplía la comprensión del vino y su disfrute.
 •	Cada región visitada es una lección viva de historia, clima y pasión vinícola.
 ''',
       ],
     ),
-    
     16: TemaContent(
       contenido: [
-        '''1. Introducción: El vino une
+      
+        '''Introducción: El vino une
 
 El vino ha sido un hilo conductor de la humanidad desde tiempos antiguos:
 •	Está presente en celebraciones, ceremonias religiosas, matrimonios y reuniones familiares.
@@ -1607,13 +1534,12 @@ El vino ha sido un hilo conductor de la humanidad desde tiempos antiguos:
 •	Cada cultura tiene su manera de ritualizar el vino, pero todas coinciden en un principio: el vino es un símbolo de unión y disfrute compartido.
 
 Más que beber, el vino es un acto de encuentro.''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad:  Historia del brindis
+      
+        '''Curiosidad:  Historia del brindis
 
 •	En la Antigua Roma, el brindis tenía un propósito práctico: demostrar que el vino no estaba envenenado.
 •	Las copas se chocaban con fuerza, mezclando unas gotas de cada una.
@@ -1621,13 +1547,12 @@ Más que beber, el vino es un acto de encuentro.''',
 •	Hoy, el brindis mantiene la esencia de compartir y celebrar, incluso en reuniones informales.
 
 Un simple choque de copas es mucho más que sonido: es confianza y comunión.''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “What a Wonderful World – Louis Armstrong”\n🍷 Actividad: organiza un mini brindis con 3 amigos.\n1. Elegid un vino según el tipo de encuentro (blanco fresco, rosado o espumoso).\n2. Observad la copa, olfatead los aromas y tomad un sorbo lento.\n3. Realizad el brindis con contacto visual y compartid un recuerdo o anécdota mientras bebéis.',
         ),
-
-        '''3. Enseñanza práctica: Claves del ritual moderno
+      
+        '''Enseñanza práctica: Claves del ritual moderno
 
 1. Elegir el vino adecuado para la ocasión
 •	Eventos formales: espumosos, blancos elegantes o tintos de crianza.
@@ -1648,24 +1573,21 @@ Un simple choque de copas es mucho más que sonido: es confianza y comunión.'''
 •	Promueve diálogo, historias y momentos memorables.
 •	Fomenta la empatía y la sociabilidad, convirtiendo un simple encuentro en un ritual único.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El vino sabe mejor cuando se comparte… y se recuerda.”',
         ),
       
-      '''4. Conclusión: “El vino sabe mejor cuando se comparte… y se recuerda.”
-
-•	El vino es mucho más que sabor: es un instrumento de cultura, emoción y ritual.
+        '''•	El vino es mucho más que sabor: es un instrumento de cultura, emoción y ritual.
 •	Aprender a usarlo en contextos sociales desarrolla sensibilidad, respeto y disfrute consciente.
 •	Cada brindis, cada sorbo compartido, refuerza vínculos y deja recuerdos duraderos.
 ''',
       ],
     ),
-    
     17: TemaContent(
       contenido: [
-        '''1. Introducción: La etiqueta como guía
+      
+        '''Introducción: La etiqueta como guía
 
 La etiqueta de un vino es mucho más que un adorno: es una información esencial que permite conocer la historia del vino antes de abrir la botella.
 •	Nos indica origen, añada, variedad, bodega, graduación alcohólica y características especiales.
@@ -1674,13 +1596,12 @@ La etiqueta de un vino es mucho más que un adorno: es una información esencial
 
 Interpretar una etiqueta es como leer una carta escrita con aromas, tiempo y tierra.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: La historia de la etiqueta
+      
+        '''Curiosidad: La historia de la etiqueta
 
 •	La primera etiqueta moderna apareció en el siglo XVIII, para identificar los vinos en la exportación.
 •	Originalmente solo incluía bodega y origen, pero hoy las etiquetas muestran información mucho más detallada:
@@ -1692,13 +1613,12 @@ Interpretar una etiqueta es como leer una carta escrita con aromas, tiempo y tie
 
 Leer una etiqueta correctamente nos permite anticipar la experiencia de degustación.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “La Vie en Rose – Édith Piaf”\n🍷 Actividad: toma 3 botellas distintas y analiza sus etiquetas:\n1. Identifica la denominación de origen y añada.\n2. Reconoce la variedad de uva y bodega.\n3. Compara grado alcohólico y notas complementarias.',
         ),
-
-        '''3. Enseñanza práctica: Desglosando la etiqueta
+      
+        '''Enseñanza práctica: Desglosando la etiqueta
 
 1. Denominación de origen
 •	Indica la región y el control de calidad.
@@ -1728,25 +1648,21 @@ Leer una etiqueta correctamente nos permite anticipar la experiencia de degustac
 •	Maridaje sugerido, tipo de crianza, notas de cata o certificado ecológico.
 •	Algunos vinos incluyen premios o medallas, indicativos de reconocimiento internacional.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Cada etiqueta es una carta de amor escrita por el viñedo.”',
         ),
       
-      '''4. Conclusión: “Cada etiqueta es una carta de amor escrita por el viñedo.”
-
-•	Leer etiquetas correctamente ayuda a elegir mejor, maridar mejor y disfrutar más.
+        '''•	Leer etiquetas correctamente ayuda a elegir mejor, maridar mejor y disfrutar más.
 •	La información es tu guía para entender el vino antes de probarlo.
 •	Dominar la lectura de etiquetas es un paso esencial para todo amante del vino o futuro sumiller.
 ''',
-
       ],
     ),
-    
     18: TemaContent(
       contenido: [
-        '''1. Introducción: La importancia de conservar y servir
+      
+        '''Introducción: La importancia de conservar y servir
 
 El vino es un ser vivo embotellado: continúa evolucionando después de salir de la bodega.
 •	Su sabor, aroma y textura pueden cambiar significativamente según cómo lo conservemos y sirvamos.
@@ -1755,13 +1671,12 @@ El vino es un ser vivo embotellado: continúa evolucionando después de salir de
 
 Conservar y servir correctamente es un acto de respeto hacia el vino y quienes lo disfrutan.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: El vino y su sensibilidad
+      
+        '''Curiosidad: El vino y su sensibilidad
 
 •	El vino es sensible a la luz, la temperatura y el oxígeno.
 •	En bodegas históricas, las botellas se almacenan horizontalmente, en cuevas oscuras y con temperatura constante, para preservar su calidad.
@@ -1769,13 +1684,12 @@ Conservar y servir correctamente es un acto de respeto hacia el vino y quienes l
 
 Cada botella guarda el tiempo del viñedo, y cada gesto de conservación lo protege.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Clair de Lune – Debussy”\n🍷 Actividad: prueba un mismo vino bajo distintas condiciones de servicio:\n1. Guarda una botella en posición vertical y otra horizontal, luego compara su aroma y sabor.\n2. Prueba un vino a temperatura demasiado fría y otro a temperatura ideal.\n3. Experimenta decantando un tinto de crianza versus sirviéndolo directamente en la copa.',
         ),
-
-        '''3. Enseñanza práctica: Conservación y servicio
+      
+        '''Enseñanza práctica: Conservación y servicio
 
 1. Posición de la botella
 •	Horizontal: las botellas con corcho se deben almacenar horizontalmente para mantener el corcho húmedo y evitar oxidación.
@@ -1802,25 +1716,21 @@ Cada botella guarda el tiempo del viñedo, y cada gesto de conservación lo prot
 •	Servir en cantidades moderadas (aprox. 1/3 de copa) para permitir oxigenación.
 •	Observar temperatura en copa antes de servir, ajustando si es necesario (por ejemplo, un blanco demasiado frío puede perder aromas).
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Cuidar un vino es cuidar el tiempo embotellado.”',
         ),
       
-      '''4. Conclusión: “Cuidar un vino es cuidar el tiempo embotellado.”
-
-•	La conservación y servicio prolongan la vida y calidad del vino.
+        '''•	La conservación y servicio prolongan la vida y calidad del vino.
 •	Cada detalle, desde la posición en la bodega hasta la temperatura en copa, marca la diferencia entre un vino mediocre y uno excepcional.
 •	Dominar estas técnicas es esencial para cualquier amante del vino o futuro sumiller.
 ''',
-
       ],
     ),
-    
     19: TemaContent(
       contenido: [
-        '''1. Introducción: La elección del vino
+      
+        '''Introducción: La elección del vino
 
 Elegir un vino puede parecer complicado, pero con estrategias simples y conocimiento básico, se puede acertar siempre:
 	•	Un buen vino no depende solo del precio, sino de la ocasión, la comida, el paladar de los comensales y la relación calidad-precio.
@@ -1829,13 +1739,12 @@ Elegir un vino puede parecer complicado, pero con estrategias simples y conocimi
 
 Elegir vino es anticipar placer, no adivinarlo.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: El vino y el entorno
+      
+        '''Curiosidad: El vino y el entorno
 
 •	En restaurantes, la temperatura y la conservación influyen en cómo se percibe el vino.
 •	En tiendas, muchas veces se elige por etiqueta o precio, sin conocer añada, bodega o estilo.
@@ -1843,13 +1752,12 @@ Elegir vino es anticipar placer, no adivinarlo.
 
 Un vino elegido con criterio se disfruta el doble.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Fly Me to the Moon – Frank Sinatra”\n🍷 Actividad: Simula la elección de un vino:\n1. Escoge un plato principal de un menú ficticio.\n2. Selecciona tres opciones de vino según ocasión, maridaje y presupuesto.\n3. Justifica tu elección y, si es posible, realiza una degustación comparativa.',
         ),
-
-        '''3. Enseñanza práctica: Consejos para acertar
+      
+        '''Enseñanza práctica: Consejos para acertar
 
 1. Define la ocasión
 •	Cena informal → vinos jóvenes, frescos y fáciles de beber.
@@ -1878,24 +1786,21 @@ Un vino elegido con criterio se disfruta el doble.
 •	Tu gusto personal es tan importante como las recomendaciones.
 •	La experiencia acumula conocimiento: cuanto más pruebes, mejor elegirás.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El mejor vino no es el más caro, sino el que se comparte.”',
         ),
       
-      '''4. Conclusión: “El mejor vino no es el más caro, sino el que se comparte.”
-
-•	Elegir un vino es anticipar placer, maridaje y conversación.
+        '''•	Elegir un vino es anticipar placer, maridaje y conversación.
 •	La decisión correcta combina ocasión, comida, presupuesto y preferencias personales.
 •	Con práctica y conocimiento, cualquier elección puede convertirse en una experiencia memorable.
 ''',
       ],
     ),
-    
     20: TemaContent(
       contenido: [
-        '''1. Introducción: Un vistazo al futuro
+      
+        '''Introducción: Un vistazo al futuro
 
 El mundo del vino está cambiando: la sostenibilidad y la tecnología marcan la nueva era del sector vitivinícola.
 •	Los consumidores buscan vinos responsables con el medio ambiente y respetuosos con la salud.
@@ -1904,13 +1809,12 @@ El mundo del vino está cambiando: la sostenibilidad y la tecnología marcan la 
 
 Cada sorbo puede ser un acto consciente y responsable.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Tendencias sostenibles
+      
+        '''Curiosidad: Tendencias sostenibles
 
 •	Los vinos ecológicos están libres de pesticidas sintéticos y fertilizantes químicos, priorizando la salud del suelo y la viña.
 •	Los vinos veganos evitan productos animales en clarificación y filtrado, como la clara de huevo o la gelatina.
@@ -1919,13 +1823,12 @@ Cada sorbo puede ser un acto consciente y responsable.
 
 Cada etiqueta sostenible refleja un compromiso con la tierra y la calidad.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Earth Song – Michael Jackson”\n🍷 Actividad: Prueba vinos sostenibles y compara con vinos convencionales:\n1. Degusta un vino ecológico y un vino tradicional del mismo varietal.\n2. Evalúa aroma, sabor y sensación en boca.\n3. Reflexiona sobre cómo las prácticas sostenibles influyen en la frescura, expresividad y textura del vino.',
         ),
-
-        '''3. Enseñanza práctica: Tipos de vinos sostenibles
+      
+        '''Enseñanza práctica: Tipos de vinos sostenibles
 
 1. Vinos ecológicos
 •	Certificación oficial: indican ausencia de químicos sintéticos.
@@ -1948,25 +1851,21 @@ Cada etiqueta sostenible refleja un compromiso con la tierra y la calidad.
 •	Automatización de riego y vendimia para optimizar recursos.
 •	Fermentaciones monitorizadas con precisión para coherencia y calidad constante.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“El futuro del vino se cultiva con respeto y se brinda con conciencia.”',
         ),
       
-      '''4. Conclusión: “El futuro del vino se cultiva con respeto y se brinda con conciencia.”
-
-•	La sostenibilidad y la tecnología garantizan vinos de calidad, responsables con el entorno y aptos para todos.
+        '''•	La sostenibilidad y la tecnología garantizan vinos de calidad, responsables con el entorno y aptos para todos.
 •	Conocer y elegir vinos ecológicos, veganos o biodinámicos refuerza la conciencia del consumidor y del profesional del vino.
 •	El vino del futuro no solo se bebe: se protege, se cuida y se comparte con conciencia.
 ''',
-
       ],
     ),
-    
     21: TemaContent(
       contenido: [
-        '''1. Introducción: El placer de tener tu propia bodega
+      
+        '''Introducción: El placer de tener tu propia bodega
 
 Tener una bodega personal no solo es guardar vino, es crear una experiencia y un patrimonio líquido.
 •	Cada botella refleja un momento, un viaje o un descubrimiento.
@@ -1975,13 +1874,12 @@ Tener una bodega personal no solo es guardar vino, es crear una experiencia y un
 
 Una bodega personal es un refugio de aromas, recuerdos y conocimiento.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'FICHAANVERSO',
+          reverso: 'FICHAREVERSO',
         ),
-
-        '''2. Curiosidad: Historia de las bodegas domésticas
+      
+        '''Curiosidad: Historia de las bodegas domésticas
 
 •	Las bodegas en casa surgen de la pasión y la cultura del vino, no solo del lujo.
 •	Antiguamente, se almacenaban en sótanos frescos y oscuros; hoy se utilizan armarios climatizados, cavas y vinotecas inteligentes.
@@ -1989,13 +1887,12 @@ Una bodega personal es un refugio de aromas, recuerdos y conocimiento.
 
 Cada botella cuenta una historia y se convierte en un tesoro cuando se cuida correctamente.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'EXPERIENCIA\nSENSORIAL',
+          reverso: '🎶 Música sugerida: “Autumn Leaves – Miles Davis”\n🍷 Actividad: Diseña tu bodega ideal:\n1. Determina cuántas botellas deseas almacenar y su distribución por tipo.\n2. Decide la ubicación según temperatura, luz y humedad.\n3. Planifica la rotación de botellas para consumo a corto y largo plazo.\n4.Haz un pequeño registro con notas sobre cada vino: añada, bodega, estilo y maridaje recomendado.',
         ),
-
-        '''3. Enseñanza práctica: Organización y conservación
+      
+        '''Enseñanza práctica: Organización y conservación
 
 1. Espacio y temperatura
 •	La temperatura ideal es constante: 12–16°C para tintos, 8–12°C para blancos y rosados, 6–8°C para espumosos.
@@ -2020,78 +1917,51 @@ Cada botella cuenta una historia y se convierte en un tesoro cuando se cuida cor
 •	Sacacorchos profesional, decantadores y copas adecuadas.
 •	Etiquetas o registros para anotar fecha de compra, notas de cata y maridajes sugeridos.
 ''',
-
         FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
+          anverso: 'CONCLUSIÓN',
+          reverso: '“Una bodega es un diario de recuerdos líquidos.”',
         ),
       
-      '''4. Conclusión: “Una bodega es un diario de recuerdos líquidos.”
-
-•	La creación de una bodega personal es un acto de pasión, planificación y conocimiento.
+        '''•	La creación de una bodega personal es un acto de pasión, planificación y conocimiento.
 •	Cada botella, bien conservada y organizada, cuenta una historia que puede disfrutarse años después.
 •	Dominar la conservación, rotación y registro convierte tu bodega en un espacio profesional y un legado sensorial.
 ''',
       ],
-    ),    
-
+    ),
     22: TemaContent(
       contenido: [
         '''¡Has llegado al momento culminante de tu formación vinícola!
 
 Esta prueba final evaluará de manera integral todo lo que has aprendido durante el curso My Secret Wine.
 
-
 CARACTERÍSTICAS DE LA PRUEBA:
 
 • Una pregunta representativa de cada uno de los 21 temas estudiados
 • Tiempo límite: 30 segundos por pregunta
-• Formato: una opción entre con 4 alternativas
+• Formato: una opción correcta entre 4 alternativas
 ''',
-
-        FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
-        ),
-      
         '''CRITERIOS DE EVALUACIÓN:
 
 21 respuestas correctas:
 🏆 PERFECTO - Experto en vinos
 
 18-20 respuestas correctas:
-🥈 APROBADO - Conocimientos sólidos  
+🥈 APROBADO - Conocimientos sólidos
 
 Menos de 18 correctas:
 📚 REPASO NECESARIO
-
-
 ''',
-
-        FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
-        ),
-      
-        ''' CONSEJOS PARA EL ÉXITO:
+        '''CONSEJOS PARA EL ÉXITO:
 
 • Revisa los contenidos de todos los temas
 • Practica con las fichas giratorias
 • Confía en tu conocimiento adquirido
 • Lee cada pregunta con atención
 • No te precipites, tienes tiempo suficiente
-
 ''',
-
-        FichaTema(
-          pregunta: 'pregunta',
-          respuesta: 'respuesta',
-        ),
-      
         '''Al superar esta prueba final, desbloquearás el acceso exclusivo a la "Cata Guiada Final", donde pondrás en práctica todo tu conocimiento teórico en una experiencia sensorial completa.
 
 ¡Es tu momento de brillar como conocedor del vino! 🍷
-
 ''',
       ],
     ),
@@ -2107,22 +1977,21 @@ Menos de 18 correctas:
         '''Contenido del tema $numero próximamente disponible.
 
 Este tema se encuentra en desarrollo y estará disponible en futuras actualizaciones del curso.''',
-
         FichaTema(
-          pregunta: '¿Qué aprenderás en este tema?',
-          respuesta: 'Conceptos fundamentales del Tema $numero que complementan tu formación vinícola integral.',
+          anverso: '¿Qué aprenderás en este tema?',
+          reverso:
+              'Conceptos fundamentales del Tema $numero que complementan tu formación vinícola integral.',
         ),
-
         '''Mientras tanto, puedes:
 • Continuar con los otros temas disponibles
 • Repasar los contenidos ya estudiados
 • Practicar con los ejercicios de cata
 
 ¡Gracias por tu paciencia mientras completamos todo el contenido del curso!''',
-
         FichaTema(
-          pregunta: '¿Cuándo estará listo?',
-          respuesta: 'Trabajamos constantemente para completar todos los temas. ¡Gracias por tu paciencia!',
+          anverso: '¿Cuándo estará listo?',
+          reverso:
+              'Trabajamos constantemente para completar todos los temas. ¡Gracias por tu paciencia!',
         ),
       ],
     );
